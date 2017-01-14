@@ -1,12 +1,8 @@
 ﻿=================================================================================================
 TODO :
 -------------------------------------------------------------------------------------------------
-Mémoriser les règles d'application des doubles (post majhong) dans les points et les afficher
 
-Shake groupe d'une main pour trouver mieux :
-      1) créer un autre groupe dès qu'il y a changement de famille dans un groupe
-      2) fusionner les groupes de même famille et même tuile
-      3) fusionner les groupes de même famille et tuile +/- 1 
+interface !!
 
 Gérer les grands jeux 
 
@@ -14,3 +10,11 @@ Gérer les grands jeux
 DONE :
 -------------------------------------------------------------------------------------------------
 Load file at startup
+Mémoriser les règles d'application des doubles (post majhong) dans les points et les afficher
+
+Shake groupe d'une main pour trouver mieux :
+      1) créer un autre groupe dès qu'il y a changement de famille dans un groupe
+      2) fusionner les groupes de même famille et même tuile
+      3) fusionner les groupes de même famille et tuile +/- 1 
+
+S'assurer qu'il n'y a pas plus de 13 tuiles saisie par main et qu'il n'y a qu'un seul mahjong par manche

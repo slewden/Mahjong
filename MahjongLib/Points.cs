@@ -9,7 +9,7 @@ namespace MahjongLib
   /// <summary>
   /// Pour comptabiliser les point
   /// </summary>
-  public class Points
+  public class Points : PointsBase
   {
     /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="Points"/>
@@ -52,16 +52,6 @@ namespace MahjongLib
     public int DoublesMahjong { get; set; }
 
     /// <summary>
-    /// Le nombre de combinaisons trouvées dans la main d'un joueur
-    /// </summary>
-    public int NombreCombinaison { get; set; }
-
-    /// <summary>
-    /// Le nombre de paires trouvées dans la main d'un joueur
-    /// </summary>
-    public int NombrePaire { get; set; }
-
-    /// <summary>
     /// La liste des explications
     /// </summary>
     public List<string> Motifs { get; private set; }
@@ -100,15 +90,78 @@ namespace MahjongLib
         return ((this.Nombre * Convert.ToInt32(Math.Pow(2, this.Doubles))) + this.NombreMahjong) * Convert.ToInt32(Math.Pow(2, this.DoublesMahjong));
       }
     }
+    #endregion
+
+    #region Opérateurs
+    /// <summary>
+    /// Comparaison des points : a est il supérieur à b
+    /// </summary>
+    /// <param name="a">premier opérande</param>
+    /// <param name="b">Second opérande</param>
+    /// <returns>true si a est supérieur à b</returns>
+    public static bool operator >(Points a, Points b)
+    {
+      if (a == null)
+      {
+        return false;
+      }
+      else if (b == null)
+      {
+        return true;
+      }
+      else
+      {
+        if (a.Total == b.Total)
+        {
+          if (a.NombreCombinaison == b.NombreCombinaison)
+          {
+            return a.NombrePaire > b.NombrePaire;
+          }
+          else
+          {
+            return a.NombreCombinaison > b.NombreCombinaison;
+          }
+        }
+        else
+        {
+          return a.Total > b.Total;
+        }
+      }
+    }
 
     /// <summary>
-    /// Renvoie true si le total correspond à un mahjong
+    /// Comptaraison des points : a est il inférieur à b
     /// </summary>
-    public bool Mahjong
+    /// <param name="a">premier opérande</param>
+    /// <param name="b">Second opérande</param>
+    /// <returns>true si a est inférieur à b</returns>
+    public static bool operator <(Points a, Points b)
     {
-      get
+      if (a == null)
       {
-        return this.NombreCombinaison == 4 && this.NombrePaire == 1;
+        return b != null;
+      }
+      else if (b == null)
+      {
+        return false;
+      }
+      else
+      {
+        if (a.Total == b.Total)
+        {
+          if (a.NombreCombinaison == b.NombreCombinaison)
+          {
+            return a.NombrePaire < b.NombrePaire;
+          }
+          else
+          {
+            return a.NombreCombinaison < b.NombreCombinaison;
+          }
+        }
+        else
+        {
+          return a.Total < b.Total;
+        }
       }
     }
     #endregion

@@ -17,26 +17,33 @@ namespace MahjongLib
     {
       Points pts = new Points()
                           {
-                            Nombre = points.Select(x => x.Nombre).Sum(),
-                            DoublesMotif = new DoubleMotif() { Double = points.Select(x => x.Doubles).Sum() },
                             NombreCombinaison = points.Select(x => x.NombreCombinaison).Sum(),
                             NombrePaire = points.Select(x => x.NombrePaire).Sum(),
+                            NombreTuileComptees = points.Select(x => x.NombreTuileComptees).Sum(),
+                            Nombre = points.Select(x => x.Nombre).Sum(),
+                            DoublesMotif = new DoubleMotif() { Double = points.Select(x => x.Doubles).Sum() },
                             DoublesMahjong = points.Select(x => x.DoublesMahjong).Sum(),
                             NombreMahjong = points.Select(x => x.NombreMahjong).Sum()
                           };
       pts.Motifs.Clear();
-      if (pts.Nombre > 0)
-      {
-        pts.Motifs.Add(string.Format("+{0} Points", pts.Nombre));
-      }
-      else 
-      {
-        pts.Motifs.Add("Aucun point");
-      }
-
       points.Select(x => x.Motifs).ToList().ForEach(s => pts.Motifs.AddRange(s));
 
       return pts;
+    }
+    
+    /// <summary>
+    /// Additionne deux points base
+    /// </summary>
+    /// <param name="points">la liste des points a additionner</param>
+    /// <returns>le point résultat</returns>
+    public static PointsBase Sum(this IEnumerable<PointsBase> points)
+    {
+      return new PointsBase()
+      {
+        NombreCombinaison = points.Select(x => x.NombreCombinaison).Sum(),
+        NombrePaire = points.Select(x => x.NombrePaire).Sum(),
+        NombreTuileComptees = points.Select(x => x.NombreTuileComptees).Sum(),
+      };
     }
   }
 }

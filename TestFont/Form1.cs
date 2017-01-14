@@ -208,10 +208,18 @@ namespace TestFont
         { // une tuile est sélectionnée
           Manche m = this.my.Manche;
           Joueur j = this.cbJoueurScore.SelectedItem as Joueur;
-          Groupe g = this.lstCombinaison.SelectedItem as Groupe;
-          if (m != null && j != null)
+
+          if (!m.JoueurComplet(j))
           {
-            this.newGroup = m.AddTuile(j, g, t); // TODO gérer caché montrée
+            Groupe g = this.lstCombinaison.SelectedItem as Groupe;
+            if (m != null && j != null)
+            {
+              this.newGroup = m.AddTuile(j, g, t); // TODO gérer caché montrée
+            }
+          }
+          else
+          {
+            MessageBox.Show("main complète");
           }
         }
 
@@ -287,7 +295,28 @@ namespace TestFont
       if (g != null && j != null)
       {
         g.Expose = !g.Expose;
-        g.Compute(this.my.Manche.Parametre(j));
+        g.UpdateCombinaison(this.my.Manche.Parametre(j));
+
+        this.DisplayMainJoueur();
+      }
+    }
+
+    /// <summary>
+    /// Efface le groupe en cours
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">Paramètre inutile</param>
+    private void BtClearGroup_Click(object sender, EventArgs e)
+    {
+      Groupe g = this.lstCombinaison.SelectedItem as Groupe;
+      Joueur j = this.cbJoueurScore.SelectedItem as Joueur;
+      if (g != null  && j != null)
+      {
+        Manche m = this.my.Manche;
+        foreach (Tuile tl in this.lstDetailGroupe.Items)
+        {
+          m.RemoveTuile(j, g, tl);
+        }
 
         this.DisplayMainJoueur();
       }
@@ -303,9 +332,28 @@ namespace TestFont
       this.my.Manche.Complete = true;
       this.GereBouton();
     }
+
+    /// <summary>
+    /// Shake les tuiles de la main en cours : sans show
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">Paramètre inutile</param>
+    private void BtShake_Click(object sender, EventArgs e)
+    {
+      Joueur j = this.cbJoueurScore.SelectedItem as Joueur;
+      Manche m = this.my.Manche;
+
+      if (j != null && m != null)
+      {
+        MainJoueur mj = m.Main(j);
+        AnalyseParam param = m.Parametre(j);
+        mj.Shake(param);
+        this.DisplayMainJoueur();
+      }
+    }
     #endregion
 
-    #region  gestion de l'interface
+    #region Gestion de l'interface
     /// <summary>
     /// Affiche la main d'un joueur
     /// </summary>
@@ -333,8 +381,10 @@ namespace TestFont
       MainJoueur main = this.my.Manche.Main(j);
       if (main != null)
       {
+        this.lstCombinaison.Items.Clear();
         this.lstCombinaison.Items.AddRange(main.Groupes.ToArray());
         this.lblNombreTuile.Text = main.Groupes.Select(x => x.Tuiles.Count).Sum().ToString();
+        this.lblNombreTuile.ForeColor = this.my.Manche.JoueurComplet(j) ? Color.Red : SystemColors.ControlText;
       }
 
       if (this.newGroup != null && this.lstCombinaison.Items.Contains(this.newGroup))
@@ -387,7 +437,7 @@ namespace TestFont
         this.panel1.Visible = true;
 
         this.btAddToCurrentCombinaison.Enabled = this.lstTuiles.SelectedItem != null;
-        this.btCloreManche.Visible = this.my.Manche.CanComplete;
+        this.btCloreManche.Visible = this.my.Manche.CanCompleteManche;
 
         this.lblTotalJoueur.Text = string.Empty;
         this.lblTotalPoints.Text = string.Empty;
@@ -412,10 +462,20 @@ namespace TestFont
             this.lblMahjong.Visible = pts.Mahjong;
             if (pts.Mahjong)
             {
-              this.lblMahjong.Text = string.Format("Mahjong \n+{0} x {1}", pts.NombreMahjong, pts.DoublesMahjong);
+              this.lblMahjong.Text = "Mahjong";
             }
 
-            this.lbldetailPoints.Text = pts.Motifs.Any() ? pts.Motifs.Aggregate("Détail des points", (x, y) => x + "\n" + y) : string.Empty;
+            string str;
+            if (pts.Nombre > 0)
+            {
+              str = string.Format("Détail des points\n+{0} Points", pts.Nombre);
+            }
+            else
+            {
+              str = "Détail des points\n+Aucun point";
+            }
+
+            this.lbldetailPoints.Text = pts.Motifs.Any() ? pts.Motifs.Aggregate(str, (x, y) => x + "\n" + y, x => x + string.Format("\nTotal : {0}", pts.Total)) : string.Empty;
           }
         }
 
@@ -475,20 +535,23 @@ namespace TestFont
     private void DisplayDetailCombinaison()
     {
       Groupe grp = this.lstCombinaison.SelectedItem as Groupe;
+      this.btShake.Visible = this.lstCombinaison.Items.Count > 0;
       if (grp != null)
       {
         this.btSwapGroupVisible.Text = grp.Expose ? "Masquer" : "Visible";
         this.lblCombinaison.Text = grp.Libelle();
         this.btRemoveTuileFromGroupe.Enabled = this.lstDetailGroupe.SelectedItem != null;
         this.btSwapGroupVisible.Visible = true;
-        this.btUnselCombinaison.Enabled = true;
+        this.btUnselCombinaison.Visible = true;
+        this.btClearGroup.Visible = true;
       }
       else
       {
         this.lblCombinaison.Text = string.Empty;
         this.btRemoveTuileFromGroupe.Enabled = false;
         this.btSwapGroupVisible.Visible = false;
-        this.btUnselCombinaison.Enabled = false;
+        this.btUnselCombinaison.Visible = false;
+        this.btClearGroup.Visible = false;
       }
     }
     #endregion

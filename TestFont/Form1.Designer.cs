@@ -51,6 +51,8 @@
       this.mahjongKongExpose = new System.Windows.Forms.RadioButton();
       this.mahjongFaitLastMur = new System.Windows.Forms.CheckBox();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.btShake = new System.Windows.Forms.Button();
+      this.btClearGroup = new System.Windows.Forms.Button();
       this.lblMahjong = new System.Windows.Forms.Label();
       this.lblResultat = new System.Windows.Forms.Label();
       this.label14 = new System.Windows.Forms.Label();
@@ -72,9 +74,9 @@
       this.btAddToCurrentCombinaison = new System.Windows.Forms.Button();
       this.lstCombinaison = new System.Windows.Forms.ListBox();
       this.label9 = new System.Windows.Forms.Label();
+      this.lbldetailPoints = new System.Windows.Forms.Label();
       this.cbJoueurScore = new System.Windows.Forms.ComboBox();
       this.label8 = new System.Windows.Forms.Label();
-      this.lbldetailPoints = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -96,7 +98,7 @@
       this.lstTuiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.lstTuiles.MultiColumn = true;
       this.lstTuiles.Name = "lstTuiles";
-      this.lstTuiles.Size = new System.Drawing.Size(493, 374);
+      this.lstTuiles.Size = new System.Drawing.Size(417, 374);
       this.lstTuiles.TabIndex = 0;
       this.lstTuiles.SelectedIndexChanged += new System.EventHandler(this.LstTuiles_SelectedIndexChanged);
       this.lstTuiles.DoubleClick += new System.EventHandler(this.BtAddToCurrentCombinaison_Click);
@@ -269,7 +271,7 @@
       this.groupBox3.Controls.Add(this.label8);
       this.groupBox3.Location = new System.Drawing.Point(0, 0);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(1274, 744);
+      this.groupBox3.Size = new System.Drawing.Size(1194, 744);
       this.groupBox3.TabIndex = 6;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "groupBox3";
@@ -338,6 +340,8 @@
       this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.panel1.Controls.Add(this.btShake);
+      this.panel1.Controls.Add(this.btClearGroup);
       this.panel1.Controls.Add(this.lblMahjong);
       this.panel1.Controls.Add(this.lblResultat);
       this.panel1.Controls.Add(this.label14);
@@ -364,8 +368,29 @@
       this.panel1.Controls.Add(this.lbldetailPoints);
       this.panel1.Location = new System.Drawing.Point(6, 99);
       this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(1262, 629);
+      this.panel1.Size = new System.Drawing.Size(1182, 629);
       this.panel1.TabIndex = 5;
+      // 
+      // btShake
+      // 
+      this.btShake.Location = new System.Drawing.Point(18, 15);
+      this.btShake.Name = "btShake";
+      this.btShake.Size = new System.Drawing.Size(88, 43);
+      this.btShake.TabIndex = 26;
+      this.btShake.Text = "Shake";
+      this.btShake.UseVisualStyleBackColor = true;
+      this.btShake.Click += new System.EventHandler(this.BtShake_Click);
+      // 
+      // btClearGroup
+      // 
+      this.btClearGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.btClearGroup.Location = new System.Drawing.Point(240, 112);
+      this.btClearGroup.Name = "btClearGroup";
+      this.btClearGroup.Size = new System.Drawing.Size(89, 43);
+      this.btClearGroup.TabIndex = 25;
+      this.btClearGroup.Text = "Clear";
+      this.btClearGroup.UseVisualStyleBackColor = true;
+      this.btClearGroup.Click += new System.EventHandler(this.BtClearGroup_Click);
       // 
       // lblMahjong
       // 
@@ -466,7 +491,7 @@
       // 
       this.lblCombinaison.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.lblCombinaison.AutoSize = true;
-      this.lblCombinaison.Location = new System.Drawing.Point(887, 455);
+      this.lblCombinaison.Location = new System.Drawing.Point(646, 463);
       this.lblCombinaison.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.lblCombinaison.Name = "lblCombinaison";
       this.lblCombinaison.Size = new System.Drawing.Size(61, 21);
@@ -476,9 +501,9 @@
       // btSwapGroupVisible
       // 
       this.btSwapGroupVisible.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btSwapGroupVisible.Location = new System.Drawing.Point(765, 444);
+      this.btSwapGroupVisible.Location = new System.Drawing.Point(240, 161);
       this.btSwapGroupVisible.Name = "btSwapGroupVisible";
-      this.btSwapGroupVisible.Size = new System.Drawing.Size(97, 43);
+      this.btSwapGroupVisible.Size = new System.Drawing.Size(89, 43);
       this.btSwapGroupVisible.TabIndex = 13;
       this.btSwapGroupVisible.Text = "Masquer";
       this.btSwapGroupVisible.UseVisualStyleBackColor = true;
@@ -499,7 +524,7 @@
       // 
       this.lblNombreTuile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.lblNombreTuile.AutoSize = true;
-      this.lblNombreTuile.Location = new System.Drawing.Point(142, 600);
+      this.lblNombreTuile.Location = new System.Drawing.Point(467, 600);
       this.lblNombreTuile.Name = "lblNombreTuile";
       this.lblNombreTuile.Size = new System.Drawing.Size(61, 21);
       this.lblNombreTuile.TabIndex = 11;
@@ -509,7 +534,7 @@
       // 
       this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(6, 600);
+      this.label10.Location = new System.Drawing.Point(331, 600);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(130, 21);
       this.label10.TabIndex = 10;
@@ -517,9 +542,9 @@
       // 
       // btUnselCombinaison
       // 
-      this.btUnselCombinaison.Location = new System.Drawing.Point(251, 61);
+      this.btUnselCombinaison.Location = new System.Drawing.Point(240, 63);
       this.btUnselCombinaison.Name = "btUnselCombinaison";
-      this.btUnselCombinaison.Size = new System.Drawing.Size(75, 48);
+      this.btUnselCombinaison.Size = new System.Drawing.Size(89, 43);
       this.btUnselCombinaison.TabIndex = 9;
       this.btUnselCombinaison.Text = "UnSel";
       this.btUnselCombinaison.UseVisualStyleBackColor = true;
@@ -529,7 +554,7 @@
       // 
       this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(640, 600);
+      this.label2.Location = new System.Drawing.Point(748, 594);
       this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(52, 21);
@@ -539,7 +564,7 @@
       // btRemoveTuileFromGroupe
       // 
       this.btRemoveTuileFromGroupe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btRemoveTuileFromGroupe.Location = new System.Drawing.Point(644, 444);
+      this.btRemoveTuileFromGroupe.Location = new System.Drawing.Point(644, 586);
       this.btRemoveTuileFromGroupe.Name = "btRemoveTuileFromGroupe";
       this.btRemoveTuileFromGroupe.Size = new System.Drawing.Size(97, 43);
       this.btRemoveTuileFromGroupe.TabIndex = 7;
@@ -556,10 +581,10 @@
       this.lstDetailGroupe.FormattingEnabled = true;
       this.lstDetailGroupe.HorizontalScrollbar = true;
       this.lstDetailGroupe.ItemHeight = 86;
-      this.lstDetailGroupe.Location = new System.Drawing.Point(644, 507);
+      this.lstDetailGroupe.Location = new System.Drawing.Point(644, 487);
       this.lstDetailGroupe.MultiColumn = true;
       this.lstDetailGroupe.Name = "lstDetailGroupe";
-      this.lstDetailGroupe.Size = new System.Drawing.Size(618, 90);
+      this.lstDetailGroupe.Size = new System.Drawing.Size(538, 90);
       this.lstDetailGroupe.TabIndex = 6;
       this.lstDetailGroupe.SelectedIndexChanged += new System.EventHandler(this.LstDetailGroupe_SelectedIndexChanged);
       this.lstDetailGroupe.DoubleClick += new System.EventHandler(this.BtRemoveTuileFromGroupe_Click);
@@ -568,7 +593,7 @@
       // 
       this.btAddToCurrentCombinaison.Location = new System.Drawing.Point(670, 29);
       this.btAddToCurrentCombinaison.Name = "btAddToCurrentCombinaison";
-      this.btAddToCurrentCombinaison.Size = new System.Drawing.Size(75, 34);
+      this.btAddToCurrentCombinaison.Size = new System.Drawing.Size(75, 43);
       this.btAddToCurrentCombinaison.TabIndex = 5;
       this.btAddToCurrentCombinaison.Text = "<<";
       this.btAddToCurrentCombinaison.UseVisualStyleBackColor = true;
@@ -597,6 +622,17 @@
       this.label9.TabIndex = 4;
       this.label9.Text = "Combinaisons ";
       // 
+      // lbldetailPoints
+      // 
+      this.lbldetailPoints.BackColor = System.Drawing.SystemColors.Control;
+      this.lbldetailPoints.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+      this.lbldetailPoints.Location = new System.Drawing.Point(135, 216);
+      this.lbldetailPoints.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.lbldetailPoints.Name = "lbldetailPoints";
+      this.lbldetailPoints.Size = new System.Drawing.Size(503, 312);
+      this.lbldetailPoints.TabIndex = 24;
+      this.lbldetailPoints.Text = "Détail points";
+      // 
       // cbJoueurScore
       // 
       this.cbJoueurScore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -616,22 +652,11 @@
       this.label8.TabIndex = 0;
       this.label8.Text = "Main du joueur";
       // 
-      // lbldetailPoints
-      // 
-      this.lbldetailPoints.BackColor = System.Drawing.SystemColors.Control;
-      this.lbldetailPoints.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-      this.lbldetailPoints.Location = new System.Drawing.Point(135, 145);
-      this.lbldetailPoints.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-      this.lbldetailPoints.Name = "lbldetailPoints";
-      this.lbldetailPoints.Size = new System.Drawing.Size(503, 383);
-      this.lbldetailPoints.TabIndex = 24;
-      this.lbldetailPoints.Text = "Détail points";
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1276, 748);
+      this.ClientSize = new System.Drawing.Size(1196, 748);
       this.Controls.Add(this.groupBox3);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox1);
@@ -704,6 +729,8 @@
     private System.Windows.Forms.RadioButton mahjongFaitMur;
     private System.Windows.Forms.RadioButton mahjongNone;
     private System.Windows.Forms.Label lbldetailPoints;
+    private System.Windows.Forms.Button btClearGroup;
+    private System.Windows.Forms.Button btShake;
 
   }
 }

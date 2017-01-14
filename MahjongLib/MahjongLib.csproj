@@ -55,6 +55,7 @@
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="PointHelper.cs" />
+    <Compile Include="PointsBase.cs" />
     <Compile Include="Points.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tour.cs" />

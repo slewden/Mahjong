@@ -86,14 +86,28 @@ namespace MahjongLib
     /// La saisie peut être déclarée complète
     /// (calcul du nombre de tuiles déclarées par mains)
     /// </summary>
-    public bool CanComplete
+    public bool CanCompleteManche
     {
       get
       {
-        return this.Mains.Where(x => x != null).Select(x => x.Groupes.Select(y => y.Tuiles.Count).Sum()).Sum() > 13 * 4;  // celui qui fait mahjong à au moins 14 tuiles !
+        return this.Mains.All(x => x != null && x.NombreTuilePriseEnCompte >= 13);
       }
     }
     #endregion
+
+    /// <summary>
+    /// Le joueur a t il sa main complétement remplie
+    /// </summary>
+    /// <param name="j">Le joueur</param>
+    /// <returns>true s'il n'y a plus besoin d'ajouter des tuiles</returns>
+    public bool JoueurComplet(Joueur j)
+    {
+      MainJoueur mj = this.Main(j);
+      int nb = mj.NombreTuilePriseEnCompte;
+      bool mahjong = this.Mains.Where(x => x != null && x.Joueur != j && x.TypeDeCombinaison.Mahjong).Any();
+      int cmp = mahjong ? 13 : 14;
+      return nb >= cmp;
+    }
 
     /// <summary>
     /// Renvoie la main du joueur demandé (on la crée si besoin)
@@ -143,34 +157,7 @@ namespace MahjongLib
     /// <returns>Renvoie le groupe</returns>
     public Groupe AddTuile(Joueur joueur, Groupe groupe, Tuile tuile, bool? expose = null)
     {
-      if (joueur == null || tuile == null)
-      { // y a pas ce qu'il faut pour bosser !
-        return null;
-      }
-
-      MainJoueur m = this.Main(joueur);
-      if (groupe == null)
-      { // pas de groupe on en ajoute un
-        groupe = new Groupe();
-        m.Groupes.Add(groupe);
-      }
-
-      if (expose.HasValue)
-      { // la combinaison est visible ou masquée
-        groupe.Expose = expose.Value;
-      }
-
-      AnalyseParam param = this.Parametre(joueur);
-
-      if (!groupe.Add(tuile, param))
-      { // le groupe est plein on en crée un autre
-        groupe = new Groupe();
-        m.Groupes.Add(groupe);
-        groupe.Add(tuile, param);
-      }
-
-      this.Tuiles.Remove(tuile);
-      return groupe;
+      return this.AddTuile(joueur, false, groupe, tuile, expose);
     }
 
     /// <summary>
@@ -308,7 +295,7 @@ namespace MahjongLib
                             { // autant de fois que la tuile est utilisée
                               for (int tl = 0; tl < nombre; tl++)
                               {
-                                groupe = this.AddTuile(joueur, groupe, tuile, expose);
+                                groupe = this.AddTuile(joueur, true, groupe, tuile, expose);
                               }
                             }
                           }
@@ -322,6 +309,64 @@ namespace MahjongLib
           }
         }
       }
+    }
+
+    /// <summary>
+    /// Ajoute au groupe du joueur la tuile
+    /// </summary>
+    /// <param name="joueur">Le joueur</param>
+    /// <param name="forceGroupe">Force le groupe</param>
+    /// <param name="groupe">Le groupe</param>
+    /// <param name="tuile">La tuile</param>
+    /// <param name="expose">La tuile est exposée ou pas</param>
+    /// <returns>Renvoie le groupe</returns>
+    private Groupe AddTuile(Joueur joueur, bool forceGroupe, Groupe groupe, Tuile tuile, bool? expose = null)
+    {
+      if (joueur == null || tuile == null)
+      { // y a pas ce qu'il faut pour bosser !
+        return null;
+      }
+
+      MainJoueur m = this.Main(joueur);
+      AnalyseParam param = this.Parametre(joueur);
+
+      if (groupe == null)
+      { // pas de groupe fourni ==> on en cherche un
+        if (!forceGroupe)
+        {
+          groupe = m.Groupes.Where(x => x.CanAdd(tuile, param)).FirstOrDefault();
+        }
+
+        if (groupe == null)
+        { // pas de groupe on en ajoute un
+          groupe = new Groupe();
+          m.Groupes.Add(groupe);
+        }
+      }
+
+      if (expose.HasValue)
+      { // la combinaison est visible ou masquée
+        groupe.Expose = expose.Value;
+      }
+
+      if (!groupe.Add(tuile, param))
+      { // le groupe est plein ou l'ajout n'est pas souhaitable : on en prend ou crée un autre groupe
+        if (!forceGroupe)
+        {
+          groupe = m.Groupes.Where(x => x.CanAdd(tuile, param)).FirstOrDefault();
+        }
+
+        if (groupe == null)
+        { // pas de groupe on en ajoute un
+          groupe = new Groupe();
+          m.Groupes.Add(groupe);
+        }
+
+        groupe.Add(tuile, param);
+      }
+
+      this.Tuiles.Remove(tuile);
+      return groupe;
     }
   }
 }

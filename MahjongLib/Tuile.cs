@@ -54,6 +54,11 @@ namespace MahjongLib
     public EFamille Famille { get; private set; }
 
     /// <summary>
+    /// La tuile est exposée
+    /// </summary>
+    public bool Exposee { get; set; }
+
+    /// <summary>
     /// Pour affichage
     /// </summary>
     /// <returns>Le texte de la tuile</returns>

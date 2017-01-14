@@ -19,13 +19,15 @@ namespace MahjongLib
     /// <param name="pointVisible">le nombre de points apportés si elle est visible</param>
     /// <param name="pointMasque">le nombre de points apportés si elle est masquée</param>
     /// <param name="nombreTuiles">le nombre de tuiles attendues</param>
-    public Combinaison(ETypeCombinaison typeCombi, string nom, int pointVisible, int pointMasque, int nombreTuiles)
+    /// <param name="nombreTuilesComptees">Le nombre de tuiles comptées pour cette combinaison</param>
+    public Combinaison(ETypeCombinaison typeCombi, string nom, int pointVisible, int pointMasque, int nombreTuiles, int nombreTuilesComptees)
     {
       this.TypeCombinaison = typeCombi;
       this.Nom = nom;
       this.NombrePointsSiVisible = pointVisible;
       this.NombrePointsSiMasque = pointMasque;
       this.NombreTuiles = nombreTuiles;
+      this.NombreTuilesComptees = nombreTuilesComptees;
     }
 
     #region Properties
@@ -55,9 +57,29 @@ namespace MahjongLib
     public int NombreTuiles { get; private set; }
 
     /// <summary>
+    /// le nombre de tuiles comptant pour cette combinaison
+    /// </summary>
+    public int NombreTuilesComptees { get; private set; }
+
+    /// <summary>
     /// La famille des tuiles de la combinaison
     /// </summary>
     public EFamille? Famille { get; protected set; }
+
+    /// <summary>
+    /// le nombre de combinaisons 
+    /// </summary>
+    public PointsBase TypeDeCombinaison
+    {
+      get
+      {
+        return new PointsBase()
+        {
+          NombreCombinaison = this.NombreTuiles >= 3 ? 1 : 0,
+          NombrePaire = this.NombreTuiles == 2 ? 1 : 0
+        };
+      }
+    }
     #endregion
 
     /// <summary>
@@ -111,12 +133,12 @@ namespace MahjongLib
     public Points Points(List<Tuile> tuiles, AnalyseParam param)
     {
       return new Points()
-      {
-        Nombre = this.NombrePoint(param.Expose),
-        DoublesMotif = this.NombreDouble(tuiles, param),
-        NombreCombinaison = this.NombreTuiles >= 3 ? 1 : 0,
-        NombrePaire = this.NombreTuiles == 2 ? 1 : 0
-      };
+                    {
+                      Nombre = this.NombrePoint(param.Expose),
+                      DoublesMotif = this.NombreDouble(tuiles, param),
+                      NombreCombinaison = this.NombreTuiles >= 3 ? 1 : 0,
+                      NombrePaire = this.NombreTuiles == 2 ? 1 : 0
+                    };
     }
 
     /// <summary>
@@ -128,7 +150,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="HonneurSupreme"/>
       /// </summary>
       public HonneurSupreme() :
-        base(ETypeCombinaison.Honneur, "Fleur ou Saison", 4, 4, 1)
+        base(ETypeCombinaison.Honneur, "Fleur ou Saison", 4, 4, 1, 0)
       {
       }
 
@@ -187,7 +209,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="HonneurDuJoueur"/>
       /// </summary>
       public HonneurDuJoueur() :
-        base(ETypeCombinaison.Honneur, "Fleur et Saison du joueur", 0, 0, 2)
+        base(ETypeCombinaison.Honneur, "Fleur et Saison du joueur", 0, 0, 2, 0)
       {
       }
 
@@ -243,7 +265,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PaireVentJoueur"/>
       /// </summary>
       public PaireVentJoueur() :
-        base(ETypeCombinaison.Paire, "Paire de vents du joueur", 2, 2, 2)
+        base(ETypeCombinaison.Paire, "Paire de vents du joueur", 2, 2, 2, 2)
       {
       }
 
@@ -303,7 +325,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PaireVentDominant"/>
       /// </summary>
       public PaireVentDominant() :
-        base(ETypeCombinaison.Paire, "Paire de vents dominant", 2, 2, 2)
+        base(ETypeCombinaison.Paire, "Paire de vents dominant", 2, 2, 2, 2)
       {
       }
 
@@ -363,7 +385,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PaireVentDuTour"/>
       /// </summary>
       public PaireVentDuTour() :
-        base(ETypeCombinaison.Paire, "Paire de vents du tour", 2, 2, 2)
+        base(ETypeCombinaison.Paire, "Paire de vents du tour", 2, 2, 2, 2)
       {
       }
 
@@ -423,7 +445,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PaireDragon"/>
       /// </summary>
       public PaireDragon() :
-        base(ETypeCombinaison.Paire, "Paire de dragons", 0, 2, 2)
+        base(ETypeCombinaison.Paire, "Paire de dragons", 0, 2, 2, 2)
       {
       }
 
@@ -483,7 +505,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PaireSimple"/>
       /// </summary>
       public PaireSimple() :
-        base(ETypeCombinaison.Paire, "Paire", 0, 0, 2)
+        base(ETypeCombinaison.Paire, "Paire", 0, 0, 2, 2)
       {
       }
 
@@ -537,7 +559,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="Show"/>
       /// </summary>
       public Show() :
-        base(ETypeCombinaison.Combinaison, "Show", 0, 0, 3)
+        base(ETypeCombinaison.Combinaison, "Show", 0, 0, 3, 3)
       {
       }
 
@@ -602,7 +624,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PungMineure"/>
       /// </summary>
       public PungMineure() :
-        base(ETypeCombinaison.Combinaison, "Pung (de tuiles mineures)", 2, 4, 3)
+        base(ETypeCombinaison.Combinaison, "Pung (de tuiles mineures)", 2, 4, 3, 3)
       {
       }
 
@@ -662,7 +684,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="PungMajeur"/>
       /// </summary>
       public PungMajeur() :
-        base(ETypeCombinaison.Combinaison, "Pung (de tuiles majeures, vents ou dragons)", 4, 8, 3)
+        base(ETypeCombinaison.Combinaison, "Pung (de tuiles majeures, vents ou dragons)", 4, 8, 3, 3)
       {
       }
 
@@ -739,7 +761,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="KongMineur"/>
       /// </summary>
       public KongMineur() :
-        base(ETypeCombinaison.Combinaison, "Kong (de tuiles mineures)", 8, 16, 4)
+        base(ETypeCombinaison.Combinaison, "Kong (de tuiles mineures)", 8, 16, 4, 3)
       {
       }
 
@@ -799,7 +821,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="KongMajeur"/>
       /// </summary>
       public KongMajeur() :
-        base(ETypeCombinaison.Combinaison, "Kong (de tuiles majeures, vents ou dragons)", 16, 32, 4)
+        base(ETypeCombinaison.Combinaison, "Kong (de tuiles majeures, vents ou dragons)", 16, 32, 4, 3)
       {
       }
 
@@ -876,7 +898,7 @@ namespace MahjongLib
       /// Initialise une nouvelle instance de la classe <see cref="Bouquet"/>
       /// </summary>
       public Bouquet() :
-        base(ETypeCombinaison.Honneur, "Bouquet", 0, 0, 4)
+        base(ETypeCombinaison.Honneur, "Bouquet", 0, 0, 4, 0)
       {
       }
 

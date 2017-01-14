@@ -49,13 +49,31 @@ namespace MahjongLib
 
     #region Computed properties
     /// <summary>
-    /// la saisie est complète
+    /// Le nombre de tuiles (à comptabiliser) dans la main
     /// </summary>
-    public bool Complete
+    public int NombreTuilePriseEnCompte
     {
       get
       {
-        return this.Groupes.Select(x => x.Tuiles.Count()).Sum() >= 13;
+        return this.Groupes.Select(x => x.NombreTuilePriseEnCompte).Sum();
+      }
+    }
+
+    /// <summary>
+    /// Renvoie les combinaisons de la main
+    /// </summary>
+    public PointsBase TypeDeCombinaison
+    {
+      get
+      {
+        if (this.Groupes.Any())
+        {
+          return this.Groupes.Select(x => x.TypeDeCombinaison).Sum();
+        }
+        else
+        {
+          return PointsBase.Empty;
+        }
       }
     }
     #endregion
@@ -67,16 +85,55 @@ namespace MahjongLib
     /// <returns>le total des points</returns>
     public Points TotalPoints(AnalyseParam param)
     {
+      return MainJoueur.TotalPointsInternal(this.Groupes, param);
+    }
+
+    /// <summary>
+    /// Essaie des combinaisons différentes
+    /// </summary>
+    /// <param name="param">Paramètres d'analyse</param>
+    public void Shake(AnalyseParam param)
+    {
+      this.Shake(param, false);
+      this.Shake(param, true);
+    }
+    
+    /// <summary>
+    /// Renvoie Le Json de l'objet
+    /// </summary>
+    /// <returns>Le Json de l'objet</returns>
+    internal string ToJson()
+    {
+      StringBuilder res = new StringBuilder();
+      res.Append("{");
+      res.AppendFormat("\"idxJoueur\":{0}", this.Joueur.Position);
       if (this.Groupes.Any())
       {
-        Points pts = this.Groupes.Select(x => x.Points(param)).Sum();
+        res.AppendFormat(",\"groupes\":[{0}]", this.Groupes.Select(x => x.ToJson()).Aggregate((x, y) => x + "," + y));
+      }
+
+      res.Append("}");
+      return res.ToString();
+    }
+
+    /// <summary>
+    /// Calcul le total des point de la liste de combinaisons
+    /// </summary>
+    /// <param name="groupes">la liste des groupes de combinaisons a anlyser</param>
+    /// <param name="param">Paramètres d'analyse</param>
+    /// <returns>les points</returns>
+    private static Points TotalPointsInternal(List<Groupe> groupes, AnalyseParam param)
+    {
+      if (groupes.Any())
+      {
+        Points pts = groupes.Select(x => x.Points(param)).Sum();
 
         if (pts.Mahjong)
         { // mahjong détecté ==> points supplémentaires
           pts.NombreMahjong += 20; // +20 pour mahjong
           pts.Motifs.Add("+20 Mahjong");
 
-          if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 4)
+          if (groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 4)
           { // le mahjong est entièrement composé de séquences et d'une paire
             pts.NombreMahjong += 10;
             pts.Motifs.Add("+10 que des show");
@@ -88,7 +145,7 @@ namespace MahjongLib
             pts.Motifs.Add("+5 Mahjong avec une tuile du mur");
           }
 
-          if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 0)
+          if (groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 0)
           { // aucune séquence
             pts.DoublesMahjong += 1;
             pts.Motifs.Add("1 double : Aucun show");
@@ -106,20 +163,19 @@ namespace MahjongLib
             pts.Motifs.Add("1 double : Mahjong en volant un kong exposé");
           }
 
-          if (this.Groupes.Where(x => x.Combinaison != null && Combinaison.IsBrelanOuCarreMajeur(x.Combinaison)).Count() == 4)
+          if (groupes.Where(x => x.Combinaison != null && Combinaison.IsBrelanOuCarreMajeur(x.Combinaison)).Count() == 4)
           { // 4 brelans ou carré de tuiles majeures
             pts.DoublesMahjong += 1;
             pts.Motifs.Add("1 double : 4 Pung ou Kong de tuiles majeures");
           }
 
-          if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison.Famille.HasValue).Select(x => x.Combinaison.Famille.Value).Where(f => f.IsOrdinaire()).Distinct().Count() <= 1)
+          if (groupes.Where(x => x.Combinaison != null && x.Combinaison.Famille.HasValue).Select(x => x.Combinaison.Famille.Value).Where(f => f.IsOrdinaire()).Distinct().Count() <= 1)
           { // main pure
             pts.DoublesMahjong += 3;
             pts.Motifs.Add("3 doubles : Main pure");
           }
         }
 
-        pts.Motifs.Add(string.Format("Total : {0}", pts.Total));
         return pts;
       }
 
@@ -127,21 +183,81 @@ namespace MahjongLib
     }
 
     /// <summary>
-    /// Renvoie Le Json de l'objet
+    /// Mélange les groupes pour trouver les meilleures combinaisons
     /// </summary>
-    /// <returns>Le Json de l'objet</returns>
-    internal string ToJson()
+    /// <param name="param">Les paramètres d'analyse</param>
+    /// <param name="avecShow">avec les show</param>
+    private void Shake(AnalyseParam param, bool avecShow)
     {
-      StringBuilder res = new StringBuilder();
-      res.Append("{");
-      res.AppendFormat("\"idxJoueur\":{0}", this.Joueur.Position);
-      if (this.Groupes.Any())
+      Points pt = this.TotalPoints(param);
+      List<Tuile> list = new List<Tuile>();
+      foreach (Groupe g in this.Groupes)
       {
-        res.AppendFormat(",\"groupes\":[{0}]", this.Groupes.Select(x => x.ToJson()).Aggregate((x, y) => x + "," + y));
+        list.AddRange(g.Tuiles);
       }
 
-      res.Append("}");
-      return res.ToString();
+      List<Groupe> grps = new List<Groupe>();
+      Groupe grp = null;
+      foreach (Tuile t in list.OrderBy(x => x.Famille).ThenBy(x => x.Rang))
+      {
+        if (grp != null && grp.CanAdd(t, param, avecShow))
+        {
+          grp.Expose |= t.Exposee;
+          grp.Tuiles.Add(t);
+        }
+        else
+        {
+          grp = new Groupe();
+          grps.Add(grp);
+          grp.Expose = t.Exposee;
+          grp.Tuiles.Add(t);
+        }
+      }
+
+      foreach (var grp2 in grps.Where(x => x.Tuiles.Any()))
+      {
+        grp2.UpdateCombinaison(param);
+      }
+
+      if (avecShow)
+      { // on a le droit aux show
+        // phase un on récupère les tuiles des groupes qui sont incomplet
+        list = new List<Tuile>();
+        foreach (Groupe g in grps.Where(x => x.Combinaison == null))
+        {
+          list.AddRange(g.Tuiles);
+          g.Tuiles.Clear();
+        }
+
+        grp = null;
+        foreach (Tuile t in list.OrderBy(x => x.Famille).ThenBy(x => x.Rang))
+        {
+          grp = grps.Where(x => x.CanAdd(t, param, false)).FirstOrDefault();
+          if (grp != null)
+          {
+            grp.Expose |= t.Exposee;
+            grp.Tuiles.Add(t);
+          }
+          else
+          {
+            grp = new Groupe();
+            grps.Add(grp);
+            grp.Expose = t.Exposee;
+            grp.Tuiles.Add(t);
+          }
+        }
+
+        foreach (var grp2 in grps.Where(x => x.Tuiles.Any()))
+        {
+          grp2.UpdateCombinaison(param);
+        }
+      }
+
+      Points pt2 = MainJoueur.TotalPointsInternal(grps, param);
+      if (pt2 > pt)
+      { // y a un gain on fait
+        this.Groupes = grps.Where(x => x.Tuiles.Any()).ToList();
+      }
     }
   }
 }

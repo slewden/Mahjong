@@ -11,6 +11,11 @@ namespace MahjongLib
   public class Groupe
   {
     /// <summary>
+    /// Les tuiles sont exposées ou masquées
+    /// </summary>
+    private bool expose;
+
+    /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="Groupe"/>
     /// </summary>
     public Groupe()
@@ -34,7 +39,37 @@ namespace MahjongLib
     /// <summary>
     /// Les tuiles sont exposées ou masquées
     /// </summary>
-    public bool Expose { get; set; }
+    public bool Expose 
+    {
+      get
+      {
+        return this.expose;
+      }
+      
+      set
+      {
+        this.expose = value;
+        this.Tuiles.ForEach(x => x.Exposee = value);
+      }
+    }
+
+    /// <summary>
+    /// Le nombre de tuiles à prendre en compte pour compter si la main est ok
+    /// </summary>
+    public int NombreTuilePriseEnCompte
+    {
+      get
+      {
+        if (this.Combinaison == null)
+        {
+          return this.Tuiles.Count;
+        }
+        else
+        {
+          return Math.Min(this.Combinaison.NombreTuilesComptees, 3);
+        }
+      }
+    }
     #endregion
 
     #region Computed Properties
@@ -57,6 +92,22 @@ namespace MahjongLib
       get
       {
         return this.Combinaison == null ? 0 : this.Combinaison.NombrePoint(this.Expose);
+      }
+    }
+
+    /// <summary>
+    /// Type de combinaison du groupe
+    /// </summary>
+    public PointsBase TypeDeCombinaison
+    {
+      get
+      {
+        if (this.Combinaison != null)
+        {
+          return this.Combinaison.TypeDeCombinaison;
+        }
+
+        return MahjongLib.PointsBase.Empty;
       }
     }
     #endregion
@@ -143,13 +194,67 @@ namespace MahjongLib
     }
 
     /// <summary>
-    /// Calcule la combinaison possible
+    /// indique si l'on peut ajouter le tuile
     /// </summary>
-    /// <param name="param">les paramètres d'analyse</param>
-    public void Compute(AnalyseParam param)
+    /// <param name="tuile">la tuile</param>
+    /// <param name="param">les paramètres de l'analyseur</param>
+    /// <param name="avecShow">Autorise les show</param>
+    /// <returns>true si l'on peut</returns>
+    public bool CanAdd(Tuile tuile, AnalyseParam param, bool avecShow = true)
     {
-      param.Expose = this.Expose;
-      this.Combinaison = AnalyseCombinaison.Compute(this.Tuiles, param);
+      if (tuile == null)
+      {
+        return false;
+      }
+
+      if (this.Tuiles.Count == 4)
+      { // combinaison pas pleine
+        return false;
+      }
+
+      if (this.Tuiles.Count == 0)
+      { // pas de tuile on peut donc toujours en ajouter une
+        return true;
+      }
+
+      Tuile t = this.Tuiles.First();
+      if (t.Famille != tuile.Famille)
+      { // pas la même famille ==> pas de combinaison possible
+        return false;
+      }
+
+      Combinaison cb = this.Compute(tuile, param);
+      if (cb != null)
+      { // l'ajout de la tuile amène à une combinaison
+        return true;
+      }
+
+      if (this.Tuiles.Count >= 2)
+      { // l'ajout d'une 3ième ou 4ième tuile qui n'amène pas à une combinaison ==> on refuse
+        return false;
+      }
+
+      if (this.Combinaison != null)
+      { // l'ajout de la tuile fait perdre la combinaison
+        return false;
+      }
+
+      // on a 1 seule tuile et pas encore de combinaison : on laisse faire
+      // seul cas possibles : paire ou début d'une suite soit [x, x+1] ou [x, x+2]
+      if (t.Rang == tuile.Rang)
+      { // paire non valorisée
+        return true;
+      }
+
+      if (avecShow)
+      {
+        if (t.Rang == tuile.Rang + 1 || t.Rang == tuile.Rang - 1 || t.Rang == tuile.Rang + 2 || t.Rang == tuile.Rang - 2)
+        { // début de suite
+          return true;
+        }
+      }
+
+      return false;
     }
 
     /// <summary>
@@ -158,26 +263,25 @@ namespace MahjongLib
     /// <param name="tuile">La tuile</param>
     /// <param name="param">les paramètres d'analyse</param>
     /// <returns>true si la tuile a été ajoutée</returns>
-    internal bool Add(Tuile tuile, AnalyseParam param)
+    public bool Add(Tuile tuile, AnalyseParam param)
     {
-      if (this.Tuiles.Count < 4)
-      {
-        bool isCombinaisonAvant = this.Combinaison != null;
-        this.Tuiles.Add(tuile);
-        this.Compute(param);
-        if (this.Combinaison == null && isCombinaisonAvant)
-        { // la tuile ajouté fait perdre la combinaison ==> on empèche cela
-          this.Tuiles.Remove(tuile);
-          this.Compute(param);
-          return false;
-        }
+      if (this.CanAdd(tuile, param))
+      { // on peut l'ajouter
+        if (this.Tuiles.Count == 0 || this.Tuiles.First().Famille == tuile.Famille)
+        {
+          tuile.Exposee = this.Expose;
+          this.Tuiles.Add(tuile);
+          this.Combinaison = this.Compute(null, param);
+          if (this.Combinaison != null)
+          {
+            this.Tuiles = this.Tuiles.OrderBy(x => x.Rang).ToList();
+          }
 
-        return true;
+          return true;
+        }
       }
-      else
-      {
-        return false;
-      }
+
+      return false;
     }
 
     /// <summary>
@@ -186,12 +290,13 @@ namespace MahjongLib
     /// <param name="tuile">La tuile</param>
     /// <param name="param">les paramètres d'analyse</param>
     /// <returns>True si la tuile a été retrouvée</returns>
-    internal bool Remove(Tuile tuile, AnalyseParam param)
+    public bool Remove(Tuile tuile, AnalyseParam param)
     {
       if (this.Tuiles.Contains(tuile))
       {
         this.Tuiles.Remove(tuile);
-        this.Compute(param);
+        tuile.Exposee = false;
+        this.Combinaison = this.Compute(null, param);
         return true;
       }
 
@@ -199,10 +304,19 @@ namespace MahjongLib
     }
 
     /// <summary>
+    /// Met à jour la combinaison avec les nouveaux paramètres d'analyse
+    /// </summary>
+    /// <param name="param">les nouveaux paramètres d'analyse</param>
+    public void UpdateCombinaison(AnalyseParam param)
+    {
+      this.Combinaison = this.Compute(null, param);
+    }
+
+    /// <summary>
     /// Renvoie Le Json de l'objet
     /// </summary>
     /// <returns>Le Json de l'objet</returns>
-    internal string ToJson()
+    public string ToJson()
     {
       StringBuilder res = new StringBuilder();
       res.Append("{");
@@ -216,6 +330,25 @@ namespace MahjongLib
 
       res.Append("}");
       return res.ToString();
+    }
+    
+    /// <summary>
+    /// Calcule la combinaison possible
+    /// </summary>
+    /// <param name="tuile">La tuiles supplémentaire à prendre en compte</param>
+    /// <param name="param">les paramètres d'analyse</param>
+    /// <returns>la combinaison trouvée</returns>
+    private Combinaison Compute(Tuile tuile, AnalyseParam param)
+    {
+      List<Tuile> lst = new List<Tuile>();
+      lst.AddRange(this.Tuiles);
+      if (tuile != null)
+      {
+        lst.Add(tuile);
+      }
+
+      param.Expose = this.Expose;
+      return AnalyseCombinaison.Compute(lst, param);
     }
   }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 namespace MahjongLib
 {
   /// <summary>
-  /// Analyse une combinaison
+  /// Analyseur pour trouver une combinaison
   /// </summary>
   public class AnalyseCombinaison
   {
