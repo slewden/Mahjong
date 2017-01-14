@@ -1,22 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TestFont
 {
-  static class Program
+  /// <summary>
+  /// classe de démarrage pour le programme
+  /// </summary>
+  public static class Program
   {
     /// <summary>
     /// Point d'entrée principal de l'application.
     /// </summary>
     [STAThread]
-    static void Main()
+    public static void Main()
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
+      
       Application.Run(new Form1());
+      ////Application.Run(new FTestJson());
     }
   }
 }

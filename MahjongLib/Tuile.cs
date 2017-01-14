@@ -1,4 +1,6 @@
-﻿namespace MahjongLib
+﻿using System.Text;
+
+namespace MahjongLib
 {
   /// <summary>
   /// Définition d'un tuile du jeu
@@ -57,7 +59,7 @@
     /// <returns>Le texte de la tuile</returns>
     public override string ToString()
     {
-      return this.Code; //+ " " + this.Nom;
+      return this.Code; ////+ " " + this.Nom;
     }
 
     /// <summary>
@@ -83,6 +85,26 @@
     public override int GetHashCode()
     {
       return string.Format("{0:d}-{1}", this.Famille, this.Rang).GetHashCode();
+    }
+
+    /// <summary>
+    /// Renvoie Le Json de l'objet
+    /// </summary>
+    /// <param name="nombre">Nombre de fois ou l'on a cette tuile</param>
+    /// <returns>Le Json de l'objet</returns>
+    internal string ToJson(int nombre)
+    {
+      StringBuilder res = new StringBuilder();
+      res.Append("{");
+      res.AppendFormat("\"famille\":\"{0}\"", this.Famille);
+      res.AppendFormat(",\"rang\":{0}", this.Rang);
+      if (nombre > 1)
+      {
+        res.AppendFormat(",\"nombre\":{0}", nombre);
+      }
+
+      res.Append("}");
+      return res.ToString();
     }
   }
 }

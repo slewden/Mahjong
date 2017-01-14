@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MahjongLib
 {
+  /// <summary>
+  /// Un groupe de tuiles d'une main
+  /// </summary>
   public class Groupe
   {
+    /// <summary>
+    /// Initialise une nouvelle instance de la classe <see cref="Groupe"/>
+    /// </summary>
     public Groupe()
     {
       this.Tuiles = new List<Tuile>();
@@ -15,10 +20,27 @@ namespace MahjongLib
       this.Expose = true; // par défaut c'est exposé
     }
 
+    #region Properties
+    /// <summary>
+    /// La liste des tuiles qui composent le groupe
+    /// </summary>
     public List<Tuile> Tuiles { get; private set; }
-    public Combinaison Combinaison { get; private set; }
-    public bool Expose { get; set; }
 
+    /// <summary>
+    /// La combinaison obtenue
+    /// </summary>
+    public Combinaison Combinaison { get; private set; }
+
+    /// <summary>
+    /// Les tuiles sont exposées ou masquées
+    /// </summary>
+    public bool Expose { get; set; }
+    #endregion
+
+    #region Computed Properties
+    /// <summary>
+    /// La combinaison est complète ou pas
+    /// </summary>
     public bool Complet
     {
       get
@@ -27,6 +49,9 @@ namespace MahjongLib
       }
     }
 
+    /// <summary>
+    /// renvoie le total des points
+    /// </summary>
     public int TotalPoint
     {
       get
@@ -34,7 +59,13 @@ namespace MahjongLib
         return this.Combinaison == null ? 0 : this.Combinaison.NombrePoint(this.Expose);
       }
     }
+    #endregion
 
+    /// <summary>
+    /// Renvoie les points du groupe
+    /// </summary>
+    /// <param name="param">les paramètres d'analyse</param>
+    /// <returns>Les points</returns>
     public Points Points(AnalyseParam param)
     {
       if (this.Combinaison != null)
@@ -46,6 +77,10 @@ namespace MahjongLib
       return MahjongLib.Points.Empty;
     }
 
+    /// <summary>
+    /// Pour affichage
+    /// </summary>
+    /// <returns>le texte a afficher</returns>
     public override string ToString()
     {
       if (this.Tuiles.Any())
@@ -76,7 +111,6 @@ namespace MahjongLib
         {
           return this.Tuiles.Select(x => x.Code).Aggregate((x, y) => x + " " + y);
         }
-
       }
       else
       {
@@ -84,6 +118,10 @@ namespace MahjongLib
       }
     }
 
+    /// <summary>
+    /// Le libellé décriptif
+    /// </summary>
+    /// <returns>le texte a afficher</returns>
     public string Libelle()
     {
       if (this.Tuiles.Any())
@@ -104,12 +142,22 @@ namespace MahjongLib
       }
     }
 
+    /// <summary>
+    /// Calcule la combinaison possible
+    /// </summary>
+    /// <param name="param">les paramètres d'analyse</param>
     public void Compute(AnalyseParam param)
     {
       param.Expose = this.Expose;
       this.Combinaison = AnalyseCombinaison.Compute(this.Tuiles, param);
     }
 
+    /// <summary>
+    /// tente d'ajouter une tuile au groupe et indique si c'est fait
+    /// </summary>
+    /// <param name="tuile">La tuile</param>
+    /// <param name="param">les paramètres d'analyse</param>
+    /// <returns>true si la tuile a été ajoutée</returns>
     internal bool Add(Tuile tuile, AnalyseParam param)
     {
       if (this.Tuiles.Count < 4)
@@ -132,6 +180,12 @@ namespace MahjongLib
       }
     }
 
+    /// <summary>
+    /// tente de retirer la tuile du groupe et indique si c'est fait
+    /// </summary>
+    /// <param name="tuile">La tuile</param>
+    /// <param name="param">les paramètres d'analyse</param>
+    /// <returns>True si la tuile a été retrouvée</returns>
     internal bool Remove(Tuile tuile, AnalyseParam param)
     {
       if (this.Tuiles.Contains(tuile))
@@ -142,6 +196,26 @@ namespace MahjongLib
       }
 
       return false;
+    }
+
+    /// <summary>
+    /// Renvoie Le Json de l'objet
+    /// </summary>
+    /// <returns>Le Json de l'objet</returns>
+    internal string ToJson()
+    {
+      StringBuilder res = new StringBuilder();
+      res.Append("{");
+      res.AppendFormat("\"expose\":{0}", this.Expose ? "true" : "false");
+      if (this.Tuiles.Any())
+      {
+        res.Append(",\"tuiles\":[");
+        res.Append(this.Tuiles.GroupBy(x => x).Select(x => x.Key.ToJson(x.Count())).Aggregate((x, y) => x + "," + y));
+        res.Append("]");
+      }
+
+      res.Append("}");
+      return res.ToString();
     }
   }
 }

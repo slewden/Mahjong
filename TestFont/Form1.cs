@@ -14,7 +14,7 @@ namespace TestFont
 {
   public partial class Form1 : Form
   {
-    Partie my;
+    private Partie my;
     private Groupe newGroup = null;
     private string lesTuiles;
 
@@ -71,9 +71,19 @@ namespace TestFont
 
     private void Form1_Load(object sender, EventArgs e)
     {
-      //this.listBox1.Items.AddRange(th.Jeu.ToArray());
 
+      this.my = Partie.Load(System.IO.Path.Combine(Application.StartupPath, Partie.NOMDEFAULT));
+
+      this.GereMahjongFait();
       this.GereBouton();
+    }
+
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+      if (this.my != null)
+      {
+        this.my.Save(Application.StartupPath);
+      }
     }
 
     private void BtStartPartie_Click(object sender, EventArgs e)
@@ -86,15 +96,7 @@ namespace TestFont
         joueurs.Add(this.txtVentOuest.Text);
         joueurs.Add(this.txtVentNord.Text);
         this.my = new Partie(DateTime.Now, "Test", joueurs, false); // pas d'honneur 
-
-        // ajout du premier tour
-        this.my.AddTour(my.Joueurs[0], my.Joueurs[1], my.Joueurs[2], my.Joueurs[3]);
-
-        this.cbJoueurScore.Items.Clear();
-        this.cbJoueurScore.Items.Add(this.my.Joueurs[0]);
-        this.cbJoueurScore.Items.Add(this.my.Joueurs[1]);
-        this.cbJoueurScore.Items.Add(this.my.Joueurs[2]);
-        this.cbJoueurScore.Items.Add(this.my.Joueurs[3]);
+        this.my.AddTour(my.Joueurs[0], my.Joueurs[1], my.Joueurs[2], my.Joueurs[3]);        
 
         this.GereBouton();
       }
@@ -106,12 +108,13 @@ namespace TestFont
       if (idx >= 0)
       {
         Manche m = this.my.AddManche((Vent)idx);
-
+        this.mahjongNone.Checked = true;
+        this.mahjongKongExpose.Checked = false;
         this.GereBouton();
       }
     }
 
-    private void cbVentDominant_SelectedIndexChanged(object sender, EventArgs e)
+    private void CbVentDominant_SelectedIndexChanged(object sender, EventArgs e)
     {
       this.GereBouton();
     }
@@ -124,6 +127,11 @@ namespace TestFont
     private void CbJoueurScore_SelectedIndexChanged(object sender, EventArgs e)
     {
       this.DisplayMainJoueur();
+    }
+
+    private void MahjongFait_CheckedChanged(object sender, EventArgs e)
+    {
+      this.GereMahjongFait();
     }
 
     private void LstTuiles_SelectedIndexChanged(object sender, EventArgs e)
@@ -147,7 +155,6 @@ namespace TestFont
           }
         }
 
-
         this.DisplayMainJoueur();
       }
     }
@@ -160,6 +167,7 @@ namespace TestFont
       {
         this.lstDetailGroupe.Items.AddRange(grp.Tuiles.ToArray());
         this.DisplayDetailCombinaison();
+        this.GereBouton();
       }
     }
 
@@ -206,6 +214,7 @@ namespace TestFont
       this.GereBouton();
     }
 
+    #region  gestion de l'interface
     private void DisplayMainJoueur()
     {
       var sel = this.lstCombinaison.SelectedItem; 
@@ -252,6 +261,8 @@ namespace TestFont
       this.groupBox1.Visible = false;
       this.groupBox2.Visible = false;
       this.groupBox3.Visible = false;
+
+      this.FillJoueur();
 
       if (this.my == null)
       { // pas de partie en cours
@@ -317,6 +328,42 @@ namespace TestFont
       }
     }
 
+    private void GereMahjongFait()
+    {
+      this.mahjongFaitLastMur.Enabled = this.mahjongFaitMur.Checked;
+      if (this.my != null)
+      {
+        Manche m = this.my.Manche;
+        if (m != null)
+        {
+          m.MahjongAvecTuileDuMur = this.mahjongFaitMur.Checked;
+          m.MahjongAvecDerniereTuileDuMur = this.mahjongFaitMur.Checked && this.mahjongFaitLastMur.Checked;
+          m.MahjongEnVolantKongExpose = this.mahjongKongExpose.Checked;
+          this.DisplayMainJoueur();
+        }
+      }
+
+    }
+
+    private void FillJoueur()
+    {
+      if (this.my != null)
+      {
+        if (this.cbJoueurScore.Items.Count == 0)
+        {
+          this.cbJoueurScore.Items.Clear();
+          this.cbJoueurScore.Items.Add(this.my.Joueurs[0]);
+          this.cbJoueurScore.Items.Add(this.my.Joueurs[1]);
+          this.cbJoueurScore.Items.Add(this.my.Joueurs[2]);
+          this.cbJoueurScore.Items.Add(this.my.Joueurs[3]);
+        }
+      }
+      else
+      {
+        this.cbJoueurScore.Items.Clear();
+      }
+    }
+
     private void DisplayDetailCombinaison()
     {
       Groupe grp = this.lstCombinaison.SelectedItem as Groupe;
@@ -336,5 +383,6 @@ namespace TestFont
         this.btUnselCombinaison.Enabled = false;
       }
     }
+    #endregion
   }
 }

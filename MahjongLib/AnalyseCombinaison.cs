@@ -1,36 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MahjongLib
 {
+  /// <summary>
+  /// Analyse une combinaison
+  /// </summary>
   public class AnalyseCombinaison
   {
+    /// <summary>
+    /// L'analyseur de combinaison
+    /// </summary>
     private static AnalyseCombinaison analyseur = null;
 
+    /// <summary>
+    /// La liste des combinaison possibles
+    /// </summary>
     private List<Combinaison> combinaisons;
      
+    /// <summary>
+    /// Empêche la création d'une instance par défaut de la classe <see cref="AnalyseCombinaison" />.
+    /// </summary>
     private AnalyseCombinaison()
     {
       this.combinaisons = new List<Combinaison>();
 
-      this.combinaisons.Add(new HonneurSupreme());
-      this.combinaisons.Add(new HonneurDuJoueur());
-      this.combinaisons.Add(new PaireVentJoueur());
-      this.combinaisons.Add(new PaireVentDominant());
-      this.combinaisons.Add(new PaireVentDuTour());
-      this.combinaisons.Add(new PaireDragon());
-      this.combinaisons.Add(new PaireSimple());
-      this.combinaisons.Add(new Show());
-      this.combinaisons.Add(new PungMineure());
-      this.combinaisons.Add(new PungMajeur());
-      this.combinaisons.Add(new KongMineure());
-      this.combinaisons.Add(new KongMajeur());
-      this.combinaisons.Add(new Bouquet());
+      this.combinaisons.Add(new Combinaison.HonneurSupreme());
+      this.combinaisons.Add(new Combinaison.HonneurDuJoueur());
+      this.combinaisons.Add(new Combinaison.PaireVentJoueur());
+      this.combinaisons.Add(new Combinaison.PaireVentDominant());
+      this.combinaisons.Add(new Combinaison.PaireVentDuTour());
+      this.combinaisons.Add(new Combinaison.PaireDragon());
+      this.combinaisons.Add(new Combinaison.PaireSimple());
+      this.combinaisons.Add(new Combinaison.Show());
+      this.combinaisons.Add(new Combinaison.PungMineure());
+      this.combinaisons.Add(new Combinaison.PungMajeur());
+      this.combinaisons.Add(new Combinaison.KongMineur());
+      this.combinaisons.Add(new Combinaison.KongMajeur());
+      this.combinaisons.Add(new Combinaison.Bouquet());
     }
 
+    /// <summary>
+    /// Calcule la combinaison possible à partir des tuiles et des paramètres d'analyse
+    /// </summary>
+    /// <param name="tuiles">les tuiles</param>
+    /// <param name="param">les paramétres d'analyse</param>
+    /// <returns>la combinaison optimum</returns>
     public static Combinaison Compute(List<Tuile> tuiles, AnalyseParam param)
     {
       if (tuiles == null || !tuiles.Any() || param == null)

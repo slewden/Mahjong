@@ -201,11 +201,14 @@ namespace MahjongLib
       }
     }
 
+    /// <summary>
+    /// Renvoie le texte encodé d'une tuile retournée
+    /// </summary>
     public static string HidenTuile
     {
       get
       {
-        return  System.Text.RegularExpressions.Regex.Unescape("\U0001F02B");
+        return System.Text.RegularExpressions.Regex.Unescape("\U0001F02B");
       }
     }
 

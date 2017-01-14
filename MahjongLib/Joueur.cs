@@ -1,4 +1,6 @@
-﻿namespace MahjongLib
+﻿using System.Text;
+
+namespace MahjongLib
 {
   /// <summary>
   /// Un joueur
@@ -17,17 +19,22 @@
       this.VentDuJoueurPourLeTour = null;
     }
 
+    #region Properties
     /// <summary>
     /// Le nom du joueur
     /// </summary>
     public string Nom { get; private set; }
 
     /// <summary>
-    /// Position du joueur dans les mains de chaque manche
+    /// Position du joueur dans le stockage des mains de chaque manche
     /// </summary>
     public int Position { get; private set; }
 
+    /// <summary>
+    /// Renvoie le vent du joueur pour le tour en cours
+    /// </summary>
     public Vent? VentDuJoueurPourLeTour { get; set; }
+    #endregion
 
     /// <summary>
     /// Pour affichage
@@ -68,6 +75,25 @@
     public override int GetHashCode()
     {
       return this.Nom.GetHashCode();
+    }
+
+    /// <summary>
+    /// Renvoie Le Json de l'objet
+    /// </summary>
+    /// <returns>Le Json de l'objet</returns>
+    internal string ToJson()
+    {
+      StringBuilder res = new StringBuilder();
+      res.Append("{");
+      res.AppendFormat("\"nom\":\"{0}\"", this.Nom.Replace("\"", "\\\""));
+      res.AppendFormat(", \"position\":{0}", this.Position);
+      ////if (this.VentDuJoueurPourLeTour != null)
+      ////{
+      ////  res.AppendFormat(",\"ventDuJoueurPourLeTour\":{0}", (int)this.VentDuJoueurPourLeTour.Value);
+      ////}
+
+      res.Append("}");
+      return res.ToString();
     }
   }
 }
