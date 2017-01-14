@@ -12,6 +12,14 @@ namespace MahjongLib
   public class Points
   {
     /// <summary>
+    /// Initialise une nouvelle instance de la classe <see cref="Points"/>
+    /// </summary>
+    public Points()
+    {
+      this.Motifs = new List<string>();
+    }
+
+    /// <summary>
     /// Renvoie un point vide
     /// </summary>
     public static Points Empty
@@ -22,7 +30,7 @@ namespace MahjongLib
       }
     }
 
-    #region ^Properties
+    #region Properties
     /// <summary>
     /// Nombre de points (avant mahjong)
     /// </summary>
@@ -52,6 +60,33 @@ namespace MahjongLib
     /// Le nombre de paires trouvées dans la main d'un joueur
     /// </summary>
     public int NombrePaire { get; set; }
+
+    /// <summary>
+    /// La liste des explications
+    /// </summary>
+    public List<string> Motifs { get; private set; }
+
+    /// <summary>
+    /// Affecte les doubles et leurs motifs
+    /// </summary>
+    public DoubleMotif DoublesMotif
+    {
+      set
+      {
+        if (value != null)
+        {
+          this.Doubles = value.Double;
+          if (!string.IsNullOrWhiteSpace(value.Motif))
+          {
+            this.Motifs.Add(value.Motif);
+          }
+        }
+        else
+        {
+          this.Doubles = 0;
+        }
+      }
+    }
     #endregion
 
     #region Computed properties

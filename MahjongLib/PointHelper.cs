@@ -15,15 +15,28 @@ namespace MahjongLib
     /// <returns>le point résultat</returns>
     public static Points Sum(this IEnumerable<Points> points)
     {
-      return new Points()
+      Points pts = new Points()
+                          {
+                            Nombre = points.Select(x => x.Nombre).Sum(),
+                            DoublesMotif = new DoubleMotif() { Double = points.Select(x => x.Doubles).Sum() },
+                            NombreCombinaison = points.Select(x => x.NombreCombinaison).Sum(),
+                            NombrePaire = points.Select(x => x.NombrePaire).Sum(),
+                            DoublesMahjong = points.Select(x => x.DoublesMahjong).Sum(),
+                            NombreMahjong = points.Select(x => x.NombreMahjong).Sum()
+                          };
+      pts.Motifs.Clear();
+      if (pts.Nombre > 0)
       {
-        Nombre = points.Select(x => x.Nombre).Sum(),
-        Doubles = points.Select(x => x.Doubles).Sum(),
-        NombreCombinaison = points.Select(x => x.NombreCombinaison).Sum(),
-        NombrePaire = points.Select(x => x.NombrePaire).Sum(),
-        DoublesMahjong = points.Select(x => x.DoublesMahjong).Sum(),
-        NombreMahjong = points.Select(x => x.NombreMahjong).Sum()
-      };
+        pts.Motifs.Add(string.Format("+{0} Points", pts.Nombre));
+      }
+      else 
+      {
+        pts.Motifs.Add("Aucun point");
+      }
+
+      points.Select(x => x.Motifs).ToList().ForEach(s => pts.Motifs.AddRange(s));
+
+      return pts;
     }
   }
 }

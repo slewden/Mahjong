@@ -74,42 +74,52 @@ namespace MahjongLib
         if (pts.Mahjong)
         { // mahjong détecté ==> points supplémentaires
           pts.NombreMahjong += 20; // +20 pour mahjong
+          pts.Motifs.Add("+20 Mahjong");
+
           if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 4)
           { // le mahjong est entièrement composé de séquences et d'une paire
             pts.NombreMahjong += 10;
+            pts.Motifs.Add("+10 que des show");
           }
 
           if (param.MahjongAvecTuileDuMur)
           { // mahjong avec une tuile du mur +5
             pts.NombreMahjong += 5;
+            pts.Motifs.Add("+5 Mahjong avec une tuile du mur");
           }
 
           if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison is Combinaison.Show).Count() == 0)
           { // aucune séquence
             pts.DoublesMahjong += 1;
+            pts.Motifs.Add("1 double : Aucun show");
           }
 
           if (param.MahjongAvecDerniereTuileDuMur)
           { // mahjong avec derniere tuile du mur
             pts.DoublesMahjong += 1;
+            pts.Motifs.Add("1 double : Mahjong avec la dernière tuile du mur");
           }
 
           if (param.MahjongEnVolantKongExpose)
           { // mahjong en vollant un kong exposé
-            pts.DoublesMahjong += 1; 
+            pts.DoublesMahjong += 1;
+            pts.Motifs.Add("1 double : Mahjong en volant un kong exposé");
           }
 
           if (this.Groupes.Where(x => x.Combinaison != null && Combinaison.IsBrelanOuCarreMajeur(x.Combinaison)).Count() == 4)
           { // 4 brelans ou carré de tuiles majeures
             pts.DoublesMahjong += 1;
+            pts.Motifs.Add("1 double : 4 Pung ou Kong de tuiles majeures");
           }
 
-          if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison.Famille.HasValue).Select(x => x.Combinaison.Famille.Value).Where(f => f.IsOrdinaire()).Distinct().Count() == 1)
+          if (this.Groupes.Where(x => x.Combinaison != null && x.Combinaison.Famille.HasValue).Select(x => x.Combinaison.Famille.Value).Where(f => f.IsOrdinaire()).Distinct().Count() <= 1)
           { // main pure
             pts.DoublesMahjong += 3;
+            pts.Motifs.Add("3 doubles : Main pure");
           }
         }
 
+        pts.Motifs.Add(string.Format("Total : {0}", pts.Total));
         return pts;
       }
 

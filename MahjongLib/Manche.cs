@@ -278,6 +278,7 @@ namespace MahjongLib
                   { // y a ce qu'il faut
                     bool? expose = jgroupe["expose"].ValeurBool;
                     Tuile tuile;
+                    groupe = null;
 
                     List<JsonObject> jtuiles = jgroupe["tuiles"].ValeurCll;
                     if (jtuiles != null && jtuiles.Any())

@@ -79,7 +79,7 @@ namespace TestFont
       ////t.Append(System.Text.RegularExpressions.Regex.Unescape("\U0001F029"));   // saison 5 : hivers
     }
 
-    #region events
+    #region Events
     /// <summary>
     /// Chargement de la page
     /// </summary>
@@ -393,6 +393,7 @@ namespace TestFont
         this.lblTotalPoints.Text = string.Empty;
         this.lblDouble.Text = string.Empty;
         this.lblResultat.Text = string.Empty;
+        this.lbldetailPoints.Text = string.Empty;
         this.lblMahjong.Visible = false;
         Joueur j = this.cbJoueurScore.SelectedItem as Joueur;
         if (j != null)
@@ -413,6 +414,8 @@ namespace TestFont
             {
               this.lblMahjong.Text = string.Format("Mahjong \n+{0} x {1}", pts.NombreMahjong, pts.DoublesMahjong);
             }
+
+            this.lbldetailPoints.Text = pts.Motifs.Any() ? pts.Motifs.Aggregate("Détail des points", (x, y) => x + "\n" + y) : string.Empty;
           }
         }
 

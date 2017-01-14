@@ -32,7 +32,7 @@ namespace MahjongLib
     /// <summary>
     /// Le type de combinaison (pour détecter 4 combinaisons et une paire !)
     /// </summary>
-    public ETypeCombinaison TypeCombinaison { get; set; }
+    public ETypeCombinaison TypeCombinaison { get; private set; }
 
     /// <summary>
     /// Le nom
@@ -94,7 +94,13 @@ namespace MahjongLib
     /// <param name="tuiles">la liste des tuiles</param>
     /// <param name="param">les paramètres d'analyse</param>
     /// <returns>Le nombre de double</returns>
-    public abstract int NombreDouble(List<Tuile> tuiles, AnalyseParam param);
+    public abstract DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param);
+
+    /// <summary>
+    /// duplique la combinaison
+    /// </summary>
+    /// <returns>la combinaison clonée</returns>
+    public abstract Combinaison Clone();
 
     /// <summary>
     /// Renvoie les points obtenus pour cette combinaison
@@ -107,7 +113,7 @@ namespace MahjongLib
       return new Points()
       {
         Nombre = this.NombrePoint(param.Expose),
-        Doubles = this.NombreDouble(tuiles, param),
+        DoublesMotif = this.NombreDouble(tuiles, param),
         NombreCombinaison = this.NombreTuiles >= 3 ? 1 : 0,
         NombrePaire = this.NombreTuiles == 2 ? 1 : 0
       };
@@ -152,14 +158,23 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
         if (tuiles[0].Rang == param.RangVentJoueur)
         { // fleur ou saison du joueur
-          return 1;
+          return new DoubleMotif() { Double = 1, Motif = "1 double : Fleur ou Saison" };
         }
 
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new HonneurSupreme() { Famille = this.Famille };
       }
     }
 
@@ -204,9 +219,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 2;
+        return new DoubleMotif() { Double = 2, Motif = "2 doubles : Fleur et Saison du joueur" };
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new HonneurDuJoueur() { Famille = this.Famille };
       }
     }
 
@@ -255,9 +279,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PaireVentJoueur() { Famille = this.Famille };
       }
     }
 
@@ -306,9 +339,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PaireVentDominant() { Famille = this.Famille };
       }
     }
 
@@ -357,9 +399,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PaireVentDuTour() { Famille = this.Famille };
       }
     }
 
@@ -408,9 +459,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PaireDragon() { Famille = this.Famille };
       }
     }
 
@@ -453,9 +513,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PaireSimple() { Famille = this.Famille };
       }
     }
 
@@ -509,9 +578,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new Show() { Famille = this.Famille };
       }
     }
 
@@ -560,9 +638,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PungMineure() { Famille = this.Famille };
       }
     }
 
@@ -611,22 +698,35 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
         if (tuiles[0].Famille == EFamille.Dragon)
         { // Dragon : Doublé une fois
-          return 1;
+          return new DoubleMotif() { Double = 1, Motif = "1 double : Pung de dragons" };
         }
         else if (tuiles[0].Famille == EFamille.Vent && tuiles[0].Rang == param.RangVentJoueur)
         { // vent du joueur : doublé 1x si aussi vent dominant x2
-          return tuiles[0].Rang == param.RangVentDominant ? 2 : 1;
+          return new DoubleMotif()
+                      {
+                        Double = tuiles[0].Rang == param.RangVentDominant ? 2 : 1,
+                        Motif = tuiles[0].Rang == param.RangVentDominant ? "2 doubles : Pung du vent du joueur et dominant" : "1 double : Pung du vent du joueur"
+                      };
         }
         else if (tuiles[0].Famille == EFamille.Vent && tuiles[0].Rang == param.RangVentDominant)
         { // vent dominant : doublé 1x
-          return 1;
+          return new DoubleMotif() { Double = 1, Motif = "1 double : Pung du vent dominant" };
         }
 
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new PungMajeur() { Famille = this.Famille };
       }
     }
 
@@ -675,9 +775,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new KongMineur() { Famille = this.Famille };
       }
     }
 
@@ -726,22 +835,35 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
         if (tuiles[0].Famille == EFamille.Dragon)
         { // Dragon : Doublé une fois
-          return 1;
+          return new DoubleMotif() { Double = 1, Motif = "1 double : Kong de dragons" };
         }
         else if (tuiles[0].Famille == EFamille.Vent && tuiles[0].Rang == param.RangVentJoueur)
-        { // vent du joueur : doublé 1x
-          return 1;
+        { // vent du joueur : doublé 1x si aussi vent dominant x2
+          return new DoubleMotif()
+          {
+            Double = tuiles[0].Rang == param.RangVentDominant ? 2 : 1,
+            Motif = tuiles[0].Rang == param.RangVentDominant ? "2 doubles : Kong du vent du joueur et dominant" : "1 double : Kong du vent du joueur"
+          };
         }
         else if (tuiles[0].Famille == EFamille.Vent && tuiles[0].Rang == param.RangVentDominant)
         { // vent dominant : doublé 1x
-          return 1;
+          return new DoubleMotif() { Double = 1, Motif = "1 double : Kong du vent dominant" };
         }
 
-        return 0;
+        return null;
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new KongMajeur() { Famille = this.Famille };
       }
     }
 
@@ -785,9 +907,18 @@ namespace MahjongLib
       /// <param name="tuiles">la liste des tuiles</param>
       /// <param name="param">les paramètres d'analyse</param>
       /// <returns>Le nombre de double</returns>
-      public override int NombreDouble(List<Tuile> tuiles, AnalyseParam param)
+      public override DoubleMotif NombreDouble(List<Tuile> tuiles, AnalyseParam param)
       {
-        return 4;
+        return new DoubleMotif() { Double = 4, Motif = "4 doubles : Bouquet de fleurs ou saisons" };
+      }
+
+      /// <summary>
+      /// Duplique la combinaison
+      /// </summary>
+      /// <returns>la combinaison clonée</returns>
+      public override Combinaison Clone()
+      {
+        return new Bouquet() { Famille = this.Famille };
       }
     }
   }

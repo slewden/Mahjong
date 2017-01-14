@@ -58,7 +58,13 @@ namespace MahjongLib
         AnalyseCombinaison.analyseur = new AnalyseCombinaison();
       }
 
-      return AnalyseCombinaison.analyseur.combinaisons.Where(x => x.NombreTuiles == tuiles.Count).Where(x => x.Match(tuiles, param)).FirstOrDefault();
+      Combinaison cb = AnalyseCombinaison.analyseur.combinaisons.Where(x => x.NombreTuiles == tuiles.Count).Where(x => x.Match(tuiles, param)).FirstOrDefault();
+      if (cb != null)
+      {
+        return cb.Clone();
+      }
+
+      return null;
     }
   }
 }

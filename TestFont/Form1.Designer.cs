@@ -46,6 +46,9 @@
       this.btStartManche = new System.Windows.Forms.Button();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.mahjongNone = new System.Windows.Forms.RadioButton();
+      this.mahjongFaitMur = new System.Windows.Forms.RadioButton();
+      this.mahjongKongExpose = new System.Windows.Forms.RadioButton();
       this.mahjongFaitLastMur = new System.Windows.Forms.CheckBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.lblMahjong = new System.Windows.Forms.Label();
@@ -71,9 +74,7 @@
       this.label9 = new System.Windows.Forms.Label();
       this.cbJoueurScore = new System.Windows.Forms.ComboBox();
       this.label8 = new System.Windows.Forms.Label();
-      this.mahjongKongExpose = new System.Windows.Forms.RadioButton();
-      this.mahjongFaitMur = new System.Windows.Forms.RadioButton();
-      this.mahjongNone = new System.Windows.Forms.RadioButton();
+      this.lbldetailPoints = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -91,11 +92,11 @@
       this.lstTuiles.FormattingEnabled = true;
       this.lstTuiles.IntegralHeight = false;
       this.lstTuiles.ItemHeight = 65;
-      this.lstTuiles.Location = new System.Drawing.Point(556, 0);
+      this.lstTuiles.Location = new System.Drawing.Point(765, 0);
       this.lstTuiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.lstTuiles.MultiColumn = true;
       this.lstTuiles.Name = "lstTuiles";
-      this.lstTuiles.Size = new System.Drawing.Size(702, 374);
+      this.lstTuiles.Size = new System.Drawing.Size(493, 374);
       this.lstTuiles.TabIndex = 0;
       this.lstTuiles.SelectedIndexChanged += new System.EventHandler(this.LstTuiles_SelectedIndexChanged);
       this.lstTuiles.DoubleClick += new System.EventHandler(this.BtAddToCurrentCombinaison_Click);
@@ -104,7 +105,7 @@
       // 
       this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(570, 379);
+      this.label1.Location = new System.Drawing.Point(761, 376);
       this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(52, 21);
@@ -286,6 +287,41 @@
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Mahjong a été fait :";
       // 
+      // mahjongNone
+      // 
+      this.mahjongNone.AutoSize = true;
+      this.mahjongNone.Location = new System.Drawing.Point(6, 26);
+      this.mahjongNone.Name = "mahjongNone";
+      this.mahjongNone.Size = new System.Drawing.Size(212, 25);
+      this.mahjongNone.TabIndex = 11;
+      this.mahjongNone.TabStop = true;
+      this.mahjongNone.Text = "en prenant une tuile posée";
+      this.mahjongNone.UseVisualStyleBackColor = true;
+      // 
+      // mahjongFaitMur
+      // 
+      this.mahjongFaitMur.AutoSize = true;
+      this.mahjongFaitMur.Location = new System.Drawing.Point(241, 28);
+      this.mahjongFaitMur.Name = "mahjongFaitMur";
+      this.mahjongFaitMur.Size = new System.Drawing.Size(195, 25);
+      this.mahjongFaitMur.TabIndex = 10;
+      this.mahjongFaitMur.TabStop = true;
+      this.mahjongFaitMur.Text = "en piochant dans le mur";
+      this.mahjongFaitMur.UseVisualStyleBackColor = true;
+      this.mahjongFaitMur.CheckedChanged += new System.EventHandler(this.MahjongFait_CheckedChanged);
+      // 
+      // mahjongKongExpose
+      // 
+      this.mahjongKongExpose.AutoSize = true;
+      this.mahjongKongExpose.Location = new System.Drawing.Point(490, 28);
+      this.mahjongKongExpose.Name = "mahjongKongExpose";
+      this.mahjongKongExpose.Size = new System.Drawing.Size(205, 25);
+      this.mahjongKongExpose.TabIndex = 9;
+      this.mahjongKongExpose.TabStop = true;
+      this.mahjongKongExpose.Text = "en volant un kong exposé";
+      this.mahjongKongExpose.UseVisualStyleBackColor = true;
+      this.mahjongKongExpose.CheckedChanged += new System.EventHandler(this.MahjongFait_CheckedChanged);
+      // 
       // mahjongFaitLastMur
       // 
       this.mahjongFaitLastMur.AutoSize = true;
@@ -325,6 +361,7 @@
       this.panel1.Controls.Add(this.label9);
       this.panel1.Controls.Add(this.label1);
       this.panel1.Controls.Add(this.lstTuiles);
+      this.panel1.Controls.Add(this.lbldetailPoints);
       this.panel1.Location = new System.Drawing.Point(6, 99);
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(1262, 629);
@@ -333,10 +370,10 @@
       // lblMahjong
       // 
       this.lblMahjong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-      this.lblMahjong.Location = new System.Drawing.Point(12, 486);
+      this.lblMahjong.Location = new System.Drawing.Point(18, 495);
       this.lblMahjong.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.lblMahjong.Name = "lblMahjong";
-      this.lblMahjong.Size = new System.Drawing.Size(121, 51);
+      this.lblMahjong.Size = new System.Drawing.Size(101, 44);
       this.lblMahjong.TabIndex = 23;
       this.lblMahjong.Text = "Mahjong";
       this.lblMahjong.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -378,7 +415,7 @@
       this.lblTotalPoints.Location = new System.Drawing.Point(1, 166);
       this.lblTotalPoints.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.lblTotalPoints.Name = "lblTotalPoints";
-      this.lblTotalPoints.Size = new System.Drawing.Size(135, 56);
+      this.lblTotalPoints.Size = new System.Drawing.Size(133, 56);
       this.lblTotalPoints.TabIndex = 19;
       this.lblTotalPoints.Text = "2500";
       this.lblTotalPoints.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -429,7 +466,7 @@
       // 
       this.lblCombinaison.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.lblCombinaison.AutoSize = true;
-      this.lblCombinaison.Location = new System.Drawing.Point(696, 458);
+      this.lblCombinaison.Location = new System.Drawing.Point(887, 455);
       this.lblCombinaison.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.lblCombinaison.Name = "lblCombinaison";
       this.lblCombinaison.Size = new System.Drawing.Size(61, 21);
@@ -439,7 +476,7 @@
       // btSwapGroupVisible
       // 
       this.btSwapGroupVisible.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btSwapGroupVisible.Location = new System.Drawing.Point(574, 447);
+      this.btSwapGroupVisible.Location = new System.Drawing.Point(765, 444);
       this.btSwapGroupVisible.Name = "btSwapGroupVisible";
       this.btSwapGroupVisible.Size = new System.Drawing.Size(97, 43);
       this.btSwapGroupVisible.TabIndex = 13;
@@ -480,7 +517,7 @@
       // 
       // btUnselCombinaison
       // 
-      this.btUnselCombinaison.Location = new System.Drawing.Point(37, 81);
+      this.btUnselCombinaison.Location = new System.Drawing.Point(251, 61);
       this.btUnselCombinaison.Name = "btUnselCombinaison";
       this.btUnselCombinaison.Size = new System.Drawing.Size(75, 48);
       this.btUnselCombinaison.TabIndex = 9;
@@ -492,7 +529,7 @@
       // 
       this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(454, 600);
+      this.label2.Location = new System.Drawing.Point(640, 600);
       this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(52, 21);
@@ -502,7 +539,7 @@
       // btRemoveTuileFromGroupe
       // 
       this.btRemoveTuileFromGroupe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btRemoveTuileFromGroupe.Location = new System.Drawing.Point(453, 447);
+      this.btRemoveTuileFromGroupe.Location = new System.Drawing.Point(644, 444);
       this.btRemoveTuileFromGroupe.Name = "btRemoveTuileFromGroupe";
       this.btRemoveTuileFromGroupe.Size = new System.Drawing.Size(97, 43);
       this.btRemoveTuileFromGroupe.TabIndex = 7;
@@ -519,17 +556,17 @@
       this.lstDetailGroupe.FormattingEnabled = true;
       this.lstDetailGroupe.HorizontalScrollbar = true;
       this.lstDetailGroupe.ItemHeight = 86;
-      this.lstDetailGroupe.Location = new System.Drawing.Point(453, 507);
+      this.lstDetailGroupe.Location = new System.Drawing.Point(644, 507);
       this.lstDetailGroupe.MultiColumn = true;
       this.lstDetailGroupe.Name = "lstDetailGroupe";
-      this.lstDetailGroupe.Size = new System.Drawing.Size(809, 90);
+      this.lstDetailGroupe.Size = new System.Drawing.Size(618, 90);
       this.lstDetailGroupe.TabIndex = 6;
       this.lstDetailGroupe.SelectedIndexChanged += new System.EventHandler(this.LstDetailGroupe_SelectedIndexChanged);
       this.lstDetailGroupe.DoubleClick += new System.EventHandler(this.BtRemoveTuileFromGroupe_Click);
       // 
       // btAddToCurrentCombinaison
       // 
-      this.btAddToCurrentCombinaison.Location = new System.Drawing.Point(464, 30);
+      this.btAddToCurrentCombinaison.Location = new System.Drawing.Point(670, 29);
       this.btAddToCurrentCombinaison.Name = "btAddToCurrentCombinaison";
       this.btAddToCurrentCombinaison.Size = new System.Drawing.Size(75, 34);
       this.btAddToCurrentCombinaison.TabIndex = 5;
@@ -545,7 +582,7 @@
       this.lstCombinaison.FormattingEnabled = true;
       this.lstCombinaison.IntegralHeight = false;
       this.lstCombinaison.ItemHeight = 86;
-      this.lstCombinaison.Location = new System.Drawing.Point(140, 0);
+      this.lstCombinaison.Location = new System.Drawing.Point(335, 0);
       this.lstCombinaison.Name = "lstCombinaison";
       this.lstCombinaison.Size = new System.Drawing.Size(303, 597);
       this.lstCombinaison.TabIndex = 3;
@@ -554,7 +591,7 @@
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(20, 5);
+      this.label9.Location = new System.Drawing.Point(213, 18);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(113, 21);
       this.label9.TabIndex = 4;
@@ -579,40 +616,16 @@
       this.label8.TabIndex = 0;
       this.label8.Text = "Main du joueur";
       // 
-      // mahjongKongExpose
+      // lbldetailPoints
       // 
-      this.mahjongKongExpose.AutoSize = true;
-      this.mahjongKongExpose.Location = new System.Drawing.Point(490, 28);
-      this.mahjongKongExpose.Name = "mahjongKongExpose";
-      this.mahjongKongExpose.Size = new System.Drawing.Size(205, 25);
-      this.mahjongKongExpose.TabIndex = 9;
-      this.mahjongKongExpose.TabStop = true;
-      this.mahjongKongExpose.Text = "en volant un kong exposé";
-      this.mahjongKongExpose.UseVisualStyleBackColor = true;
-      this.mahjongKongExpose.CheckedChanged += new System.EventHandler(this.MahjongFait_CheckedChanged);
-      // 
-      // mahjongFaitMur
-      // 
-      this.mahjongFaitMur.AutoSize = true;
-      this.mahjongFaitMur.Location = new System.Drawing.Point(241, 28);
-      this.mahjongFaitMur.Name = "mahjongFaitMur";
-      this.mahjongFaitMur.Size = new System.Drawing.Size(195, 25);
-      this.mahjongFaitMur.TabIndex = 10;
-      this.mahjongFaitMur.TabStop = true;
-      this.mahjongFaitMur.Text = "en piochant dans le mur";
-      this.mahjongFaitMur.UseVisualStyleBackColor = true;
-      this.mahjongFaitMur.CheckedChanged += new System.EventHandler(this.MahjongFait_CheckedChanged);
-      // 
-      // mahjongNone
-      // 
-      this.mahjongNone.AutoSize = true;
-      this.mahjongNone.Location = new System.Drawing.Point(6, 26);
-      this.mahjongNone.Name = "mahjongNone";
-      this.mahjongNone.Size = new System.Drawing.Size(212, 25);
-      this.mahjongNone.TabIndex = 11;
-      this.mahjongNone.TabStop = true;
-      this.mahjongNone.Text = "en prenant une tuile posée";
-      this.mahjongNone.UseVisualStyleBackColor = true;
+      this.lbldetailPoints.BackColor = System.Drawing.SystemColors.Control;
+      this.lbldetailPoints.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+      this.lbldetailPoints.Location = new System.Drawing.Point(135, 145);
+      this.lbldetailPoints.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.lbldetailPoints.Name = "lbldetailPoints";
+      this.lbldetailPoints.Size = new System.Drawing.Size(503, 383);
+      this.lbldetailPoints.TabIndex = 24;
+      this.lbldetailPoints.Text = "Détail points";
       // 
       // Form1
       // 
@@ -690,6 +703,7 @@
     private System.Windows.Forms.RadioButton mahjongKongExpose;
     private System.Windows.Forms.RadioButton mahjongFaitMur;
     private System.Windows.Forms.RadioButton mahjongNone;
+    private System.Windows.Forms.Label lbldetailPoints;
 
   }
 }
