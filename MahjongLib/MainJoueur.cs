@@ -125,8 +125,6 @@ namespace MahjongLib
       StringBuilder res = new StringBuilder();
       res.Append("{");
       res.AppendFormat("\"idxJoueur\":{0}", this.Joueur.Position);
-      ////res.AppendFormat(",\"numeroTour\":{0}", this.NumeroTour);
-      ////res.AppendFormat(",\"numeroManche\":{0}", this.NumeroManche);
       if (this.Groupes.Any())
       {
         res.AppendFormat(",\"groupes\":[{0}]", this.Groupes.Select(x => x.ToJson()).Aggregate((x, y) => x + "," + y));

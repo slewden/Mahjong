@@ -7,8 +7,14 @@ using MahjongLib.JsonLoader;
 
 namespace TestFont
 {
+  /// <summary>
+  /// Test de mise au point du json 
+  /// </summary>
   public partial class FTestJson : Form
   {
+    /// <summary>
+    /// Initialise une nouvelle instance de la classe <see cref="FTestJson" />.
+    /// </summary>
     public FTestJson()
     {
       this.InitializeComponent();
@@ -16,11 +22,21 @@ namespace TestFont
       this.Clear();
     }
 
+    /// <summary>
+    /// Changement dans la page
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void Changement(object sender, EventArgs e)
     {
       this.btParse.Enabled = !string.IsNullOrWhiteSpace(this.txtFile.Text) && File.Exists(this.txtFile.Text);
     }
 
+    /// <summary>
+    /// Changement du fichier
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void BtBrowse_Click(object sender, EventArgs e)
     {
       this.openFileDialog1.InitialDirectory = Application.StartupPath;
@@ -32,6 +48,11 @@ namespace TestFont
       }
     }
 
+    /// <summary>
+    /// Démarre le parsing
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void BtParse_Click(object sender, EventArgs e)
     {
       if (string.IsNullOrWhiteSpace(this.txtFile.Text) || !File.Exists(this.txtFile.Text))
@@ -52,6 +73,11 @@ namespace TestFont
       }
     }
 
+    /// <summary>
+    /// Changement de sélection
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
     {
       this.listBox2.Items.Clear();
@@ -67,6 +93,9 @@ namespace TestFont
       }
     }
 
+    /// <summary>
+    /// RAZ des données
+    /// </summary>
     private void Clear()
     {
       this.lblAttribut.Text = string.Empty;
@@ -78,6 +107,11 @@ namespace TestFont
       this.listBox4.Items.Clear();
     }
 
+    /// <summary>
+    /// Choix d'un niveau N°2
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void ListBox2_SelectedIndexChanged(object sender, EventArgs e)
     {
       this.Clear();
@@ -100,6 +134,11 @@ namespace TestFont
       }
     }
 
+    /// <summary>
+    /// Choix d'un niveau N°3
+    /// </summary>
+    /// <param name="sender">Qui appelle</param>
+    /// <param name="e">paramètre inutile</param>
     private void ListBox3_SelectedIndexChanged(object sender, EventArgs e)
     {
       this.listBox4.Items.Clear();
