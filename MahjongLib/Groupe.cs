@@ -35,7 +35,9 @@ namespace MahjongLib
     /// La combinaison obtenue
     /// </summary>
     public Combinaison Combinaison { get; private set; }
+    #endregion
 
+    #region Computed Properties
     /// <summary>
     /// Les tuiles sont exposées ou masquées
     /// </summary>
@@ -70,9 +72,6 @@ namespace MahjongLib
         }
       }
     }
-    #endregion
-
-    #region Computed Properties
     /// <summary>
     /// La combinaison est complète ou pas
     /// </summary>

@@ -1,0 +1,192 @@
+﻿
+// les variables
+@cl_fond: #FFFFFF;
+@cl_text: #000000;
+
+@clf_titre1: #369; //#106eb2;
+@clt_titre1: #ffffff;
+
+@clf_titre2: #ffffff;
+@clt_titre2: #106eb2;
+
+@clf_tour: #d26e1c;
+@clt_tour: #FFFFFF;
+
+@clf_manche: #1691ea;
+@clt_manche: #FFFFFF;
+
+@clf_joueur: #eeeeee;
+@clt_joueur: #000000;
+
+
+
+@sz_padding_left: 10px;
+@sz_padding_bloc: 20px;
+
+@sz_tuile: 60px;
+
+//////////////////////////////////////////////////////////////////////////
+/// validator format
+@sz_validator: 5px;
+
+@cl_ok: #42A948; // green
+@cl_ko: #a94442; // red
+
+@cl_bord: #b9b9b9; // gris
+
+//////////////////////////////////////////////////////////////////////////
+
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  color: @cl_text;
+  background-color: @cl_fond;
+}
+
+h1 {
+  font-size: 18px;
+  background-color: @clf_titre1;
+  color: @clt_titre1;
+  margin: 0;
+  padding: @sz_padding_left;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 16px;
+  background-color: @clf_titre2;
+  color: @clt_titre2;
+  margin: 0;
+  padding: @sz_padding_left * 2;
+  font-weight: 200;
+}
+
+.tour {
+  margin: 10px 0 0 @sz_padding_left * 2;
+  background-color: @clf_tour;
+  color: @clt_tour;
+  padding: 5px;
+  font-weight: 100;
+}
+
+.manche {
+  margin: 0 0 0 @sz_padding_left * 2 + @sz_padding_bloc;
+  background-color: @clf_manche;
+  color: @clt_manche;
+  padding: 5px;
+  font-weight: 100;
+  /*border:1px solid #1691ea;*/
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Tableau des joueurs
+.bloc-joueurs {
+  margin: 0 0 0 @sz_padding_left * 2 + @sz_padding_bloc*2;
+  display: table;
+  width: 95%;
+}
+
+.bloc-joueurs-row {
+  display: table-row;
+  width: 100%;
+  clear: both;
+}
+
+.bloc-joueur-col {
+  float: left;
+  display: table-column;
+  width: 20%;
+  padding: 0 5px 5px 5px;
+  margin: 0 5px 0 0;
+}
+
+.joueur-head {
+  padding: 5px 0 5px 5px;
+  background-color: @clf_joueur;
+  color: @clt_joueur;
+}
+
+.joueur-title {
+  width: 100%;
+  background-color: @clf_joueur;
+  height: 26px;
+  line-height: 26px;
+}
+
+.joueur-nom {
+  float: left;
+  display: table-column;
+  width: 40%;
+}
+
+.joueur-win {
+  float: left;
+  display: table-column;
+  width: 40%;
+  color: #0ef30e;
+  text-align: center;
+}
+
+.joueur-loose {
+  float: left;
+  display: table-column;
+  width: 40%;
+  text-align: center;
+}
+
+.joueur-incomplet {
+  float: left;
+  display: table-column;
+  width: 40%;
+  color: #ff0000;
+  text-align: center;
+  font-weight: bold;
+}
+
+.joueur-score {
+  float: left;
+  display: table-column;
+  width: 18%;
+  font-weight: 600;
+  text-align: right;
+  font-size: 24px;
+  padding: 0 5px 0 0;
+  color: #1691ea;
+}
+
+/// fin tableau des joueurs
+//////////////////////////////////////////////////////////////////////////
+
+
+.bt {
+  font-family: "Segoe UI Symbol";
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.tuile {
+  font-size: @sz_tuile;
+}
+
+//////////////////////////////////////////////////////////////////////////
+/// Validators
+.ng-valid[required], .ng-valid.required {
+  border-right: @sz_validator solid @cl_ok;
+  border-left: 1px solid @cl_bord;
+  border-top: 1px solid @cl_bord;
+  border-bottom: 1px solid @cl_bord;
+  padding-right: 2px;
+}
+
+.ng-invalid:not(form) {
+  border-right: 1px solid @cl_ko;
+  border-left: 1px solid @cl_bord;
+  border-top: 1px solid @cl_bord;
+  border-bottom: 1px solid @cl_ko;
+  padding-right: 2px;
+}
+//////////////////////////////////////////////////////////////////////////

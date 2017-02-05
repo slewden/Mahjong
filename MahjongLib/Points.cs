@@ -22,7 +22,7 @@ namespace MahjongLib
     /// <summary>
     /// Renvoie un point vide
     /// </summary>
-    public static Points Empty
+    public new static Points Empty
     {
       get
       {

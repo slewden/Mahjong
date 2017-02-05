@@ -18,3 +18,9 @@ Shake groupe d'une main pour trouver mieux :
       3) fusionner les groupes de même famille et tuile +/- 1 
 
 S'assurer qu'il n'y a pas plus de 13 tuiles saisie par main et qu'il n'y a qu'un seul mahjong par manche
+
+
+=================================================================================================
+Helps :
+-------------------------------------------------------------------------------------------------
+Recherche de fichiers de type type scripts dans nut.get : tag:typescript

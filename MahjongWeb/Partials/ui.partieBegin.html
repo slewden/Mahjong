@@ -1,0 +1,54 @@
+﻿<div>
+  <!-- Debut d'une partie -->
+  <h2>Nouvelle Partie</h2>
+  <form>
+    <div class="bloc-joueurs">
+      <div class="bloc-joueurs-row">
+        <div class="bloc-joueur-col">
+          <div class="joueur-head">
+            <div class="joueur-title">
+              <label for="est">Joueur 1 : Est</label>
+            </div>
+          </div>
+          <span>
+            <input type="text" id="est" name="est" required [(ngModel)]="est" />
+          </span>
+        </div>
+        <div class="bloc-joueur-col">
+          <div class="joueur-head">
+            <div class="joueur-title">
+              <label for="sud">Joueur 2 : Sud</label>
+            </div>
+          </div>
+          <span>
+            <input type="text" id="sud" name="sud" required [(ngModel)]="sud" />
+          </span>
+        </div>
+        <div class="bloc-joueur-col">
+          <div class="joueur-head">
+            <div class="joueur-title">
+              <label for="ouest">Joueur 3 : Ouest</label>
+            </div>
+          </div>
+          <span>
+            <input type="text" id="ouest" name="ouest" required [(ngModel)]="ouest" />
+          </span>
+        </div>
+        <div class="bloc-joueur-col">
+          <div class="joueur-head">
+            <div class="joueur-title">
+              <label for="nord">Joueur 4 : Nord</label>
+            </div>
+          </div>
+          <span>
+            <input type="text" id="nord" name="nord" required [(ngModel)]="nord" />
+          </span>
+        </div>
+      </div>
+    </div>
+
+    ##{{ diag }}##
+    <br />
+    <button>Démarrer la partie</button>
+  </form>
+</div>

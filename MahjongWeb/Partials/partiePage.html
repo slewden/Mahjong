@@ -1,0 +1,24 @@
+﻿<h1>{{name}}</h1>
+
+
+<partie-begin></partie-begin>
+
+
+<hr />
+
+<div>
+  <h4>APi key</h4>
+  {{ apiKey }}
+  <button (click)="setValue()">set new key</button>
+</div>
+
+<span *ngIf="joueurs && joueurs.length < 4">
+  Joueur <input #newJoueur (keyup.enter)="addJoueur(newJoueur.value); newJoueur.value='';" />
+  <button (click)="addJoueur(newJoueur.value); newJoueur.value='';">Ajouter</button>
+</span>
+
+<ul>
+  <li *ngFor="let joueur of joueurs" (click)="selectionneJoueur(joueur)">
+    <span *ngIf="joueur == joueurSelectionne">S</span> {{ joueur.nom }} - {{ joueur.apiKey}}
+  </li>
+</ul>

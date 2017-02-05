@@ -17,7 +17,7 @@ namespace MahjongLib
     /// </summary>
     public const string NOMDEFAULT = "mahjong.json";
 
-      /// <summary>
+    /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="Partie"/>
     /// </summary>
     /// <param name="dt">La date associée</param>
@@ -187,7 +187,7 @@ namespace MahjongLib
             JsonObject jpartie = nfos.First();
             if (jpartie.HasAttributtes(new JsonAttribut[]
                                                 {
-                                                  new JsonAttribut("date", JsonAttribut.EJsonType.Date), 
+                                                  new JsonAttribut("date", JsonAttribut.EJsonType.Date),
                                                   new JsonAttribut("comment", JsonAttribut.EJsonType.String),
                                                   new JsonAttribut("honneurs", JsonAttribut.EJsonType.Bool),
                                                   new JsonAttribut("numManche", JsonAttribut.EJsonType.Number),
@@ -197,7 +197,7 @@ namespace MahjongLib
             { // l'objet Json lu semble complet
               List<string> noms = Partie.LoadNomsJoueurs(jpartie);
               if (noms != null)
-              { 
+              {
                 Partie partie = new Partie(
                                       jpartie["date"].ValeurDate.Value,
                                       jpartie["comment"].ValeurString,
@@ -375,8 +375,8 @@ namespace MahjongLib
             break;
           }
 
-          if (jtour.HasAttributtes(new JsonAttribut[] 
-                                             { 
+          if (jtour.HasAttributtes(new JsonAttribut[]
+                                             {
                                                new JsonAttribut("idxJoueurs", JsonAttribut.EJsonType.Array),
                                                new JsonAttribut("manches", JsonAttribut.EJsonType.Array)
                                              }))
